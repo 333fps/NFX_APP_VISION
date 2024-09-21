@@ -1,5 +1,3 @@
-#include "pch/pch.h"
-
 #include "App.h"
 
 #include <nfx/Window/Window.h>

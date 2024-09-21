@@ -1,4 +1,3 @@
-#include "pch/pch.h"
 #include "SimpleOverlay.h"
 
 #include <nfx/Window/Window.h>

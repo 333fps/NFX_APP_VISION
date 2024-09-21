@@ -1,4 +1,3 @@
-#include "pch/pch.h"
 #include "CameraViewport.h"
 
 // #include <nfx/VideoCapture/VideoCaptureDeviceInfo.h>

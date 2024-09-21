@@ -1,5 +1,3 @@
-#include "pch/pch.h"
-
 #include "VideoCaptureDevice.h"
 
 #include "nfx/Image/Image.h"
