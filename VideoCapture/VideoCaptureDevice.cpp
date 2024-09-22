@@ -100,8 +100,8 @@ void VideoCaptureDevice::aquireFrame(std::stop_token token)
 
 			if (!m_frame.empty())
 			{
-				cv::imshow("img", m_frame);
-				cv::waitKey(1);
+				// cv::imshow("img", m_frame);
+				// cv::waitKey(1);
 
 				onFrameReady();
 			}
@@ -119,4 +119,5 @@ void VideoCaptureDevice::aquireFrame(std::stop_token token)
 	m_videoCapture.release();
 
 	SPDLOG_WARN("stopping");
+	// cv::destroyAllWindows();
 }

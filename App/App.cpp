@@ -106,10 +106,9 @@ bool App::init()
 		return EXIT_FAILURE;
 	}
 
-	m_gui = std::make_unique<::GUI>(m_window.get());
-
 	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>();
-	m_frameBuffer = std::make_unique<nfx::Graphics::GL::FrameBuffer>(m_window->width(), m_window->height());
+
+	m_gui = std::make_unique<::GUI>(m_window.get());
 
 	nfx::Graphics::GL::Functions_4_5 f;
 	f.initializeOpenGLFunctions();

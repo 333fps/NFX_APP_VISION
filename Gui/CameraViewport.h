@@ -1,11 +1,15 @@
 #pragma once
 
-// #include <nfx/GUI/Combo.h>
-// #include <nfx/GUI/CheckBox.h>
-//
-// #include "VideoCapture/VideoCaptureDevice.h"
-//
-// #include <nfx/Graphics/GL/Definitions.h>
+namespace nfx
+{
+	namespace Graphics
+	{
+		namespace GL
+		{
+			class Texture2D;
+		}
+	}
+}
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/videoio.hpp>
@@ -31,8 +35,11 @@ public:
 private:
 	GLuint imageTexture_cam0;
 
+	nfx::Graphics::GL::Texture2D* m_texture;
+
 	cv::Mat m_frame;
 
-	void BindCVMat2GLTexture(const cv::Mat& frame);
-	void initTexture(const cv::Mat& frame);
+	std::atomic<bool> oktowrite{ true };
+
+	bool ok{ false };
 };

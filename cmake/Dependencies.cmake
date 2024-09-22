@@ -9,7 +9,9 @@
 add_dependencies(${PROJECT_NAME} "copy_resources_folder_${PROJECT_NAME}")
 
 find_package( OpenCV CONFIG REQUIRED )
-target_link_libraries( ${PROJECT_NAME} PRIVATE ${OpenCV_LIBS} )
+target_link_libraries( ${PROJECT_NAME} PRIVATE
+										opencv_videoio
+)
 
 target_link_libraries( ${PROJECT_NAME} PUBLIC
 											nfxCore

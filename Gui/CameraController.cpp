@@ -35,7 +35,6 @@ void CameraController::draw()
 	{
 		m_cbCameras.draw();
 		m_cbResolutions.draw();
-
 		m_checkBox.draw();
 
 		float fps{ 0.f };
@@ -44,9 +43,8 @@ void CameraController::draw()
 			fps = m_videoCaptureDevice->fps();
 		}
 		ImGui::Text("CameraFPS %.2f ", fps);
-
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 void CameraController::cameraIndexChanged(unsigned idx)
@@ -65,8 +63,6 @@ void CameraController::cameraIndexChanged(unsigned idx)
 
 void CameraController::cameraCheckBoxClicked(bool b)
 {
-	std::cout << b << std::endl;
-
 	if (b)
 	{
 		m_videoCaptureDevice.reset(new VideoCaptureDevice{ (uint16_t)m_cbCameras.currentIndex() });
@@ -74,7 +70,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_cbCameras.data(m_cbCameras.currentIndex()));
 		const auto& resolution = data.at(m_cbResolutions.currentIndex());
 
-		m_videoCaptureDevice->open(resolution);
+		m_videoCaptureDevice->open(resolution.x, resolution.y, resolution.fps);
 
 		m_videoCaptureDevice->registerFrameReadyCallback(
 			std::bind(

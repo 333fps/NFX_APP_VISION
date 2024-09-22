@@ -12,8 +12,16 @@
 #include <imgui.h>
 #include <implot.h>
 
+#include <spdlog/spdlog.h>
+
+#include <glm/glm.hpp>
+
 CameraViewport::CameraViewport()
 {
+	// nfx::Graphics::GL::Functions_4_5 f;
+	// f.initializeOpenGLFunctions();
+
+	// p_frameBuffer->release();
 }
 
 CameraViewport::~CameraViewport()
@@ -22,71 +30,62 @@ CameraViewport::~CameraViewport()
 
 void CameraViewport::draw()
 {
+	if (!ok)
+	{
+		return;
+	}
+
+	if (!m_frame.empty() && !oktowrite.load())
+	{
+		// nfx::Graphics::GL::Functions_4_5 f;
+		// f.initializeOpenGLFunctions();
+
+		static bool first{ true };
+
+		if (first)
+		{
+			m_texture = new nfx::Graphics::GL::Texture2D{
+				nullptr,
+				(short)m_frame.cols, (short)m_frame.rows,
+				nfx::Graphics::GL::TextureFormat::BGR,
+				nfx::Graphics::GL::TextureUnit::Unit0,
+				nfx::Graphics::GL::TextureType::Diffuse,
+				nfx::Graphics::GL::TextureMinFilter::Nearest,
+				nfx::Graphics::GL::TextureMagFilter::Nearest,
+				nfx::Graphics::GL::TextureWrapMode::ClampToBorder,
+				nfx::Graphics::GL::TextureWrapMode::ClampToBorder
+			};
+
+			first = false;
+		}
+
+		// m_texture->bind();
+
+		m_texture->update((char*)m_frame.ptr());
+
+		// m_texture->release();
+
+		oktowrite.store(true);
+	}
+
+	if (!m_texture)
+	{
+		return;
+	}
+
 	if (ImGui::Begin("cam0"))
 	{
-		ImGui::Text("pointer = %p", imageTexture_cam0);
-		ImGui::Text("size = %d x %d", 800, 600);
-		ImGui::Image((void*)(intptr_t)imageTexture_cam0, ImVec2(800, 600));
-		ImGui::End();
+		ImGui::Image((void*)(intptr_t)m_texture->id(), ImVec2(m_frame.cols, m_frame.rows));
 	}
+	ImGui::End();
 }
 
 void CameraViewport::setFrame(const cv::Mat& frame)
 {
-	(void)frame;
-	std::cout << "received" << std::endl;
-
-	BindCVMat2GLTexture(frame);
-}
-
-void CameraViewport::BindCVMat2GLTexture(const cv::Mat& frame)
-{
-	nfx::Graphics::GL::Functions_4_5 f;
-	// f.initializeOpenGLFunctions();
-
-	static bool first{ true };
-	if (first)
+	if (oktowrite)
 	{
-		initTexture(frame);
+		m_frame = frame;
+		oktowrite.store(false);
+		ok = true;
 	}
-
-	f.glBindTexture(GL_TEXTURE_2D, imageTexture_cam0); // Allocate GPU memory for handle (Texture ID)
-
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Set texture clamping method
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	cv::cvtColor(frame, frame, cv::COLOR_RGB2BGR);
-
-	f.glTexImage2D(GL_TEXTURE_2D, // Type of texture
-		0,						  // Pyramid level (for mip-mapping) - 0 is the top level
-		GL_RGB,					  // Internal colour format to convert to
-		frame.cols,				  // Image width  i.e. 640 for Kinect in standard mode
-		frame.rows,				  // Image height i.e. 480 for Kinect in standard mode
-		0,						  // Border width in pixels (can either be 1 or 0)
-		GL_RGB,					  // Input image format (i.e. GL_RGB, GL_RGBA, GL_BGR etc.)
-		GL_UNSIGNED_BYTE,		  // Image data type
-		frame.ptr()				  // The actual image data itself
-	);
-
-	std::cout << frame.cols << "," << frame.rows << std::endl;
-}
-
-void CameraViewport::initTexture(const cv::Mat& frame)
-{
-	nfx::Graphics::GL::Functions_4_5 f;
-
-	f.glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	f.glGenTextures(1, &imageTexture_cam0);			   // Gen a new texture and store the handle
-	f.glBindTexture(GL_TEXTURE_2D, imageTexture_cam0); // Allocate GPU memory for handle (Texture ID)
-
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Set texture clamping method
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	f.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }

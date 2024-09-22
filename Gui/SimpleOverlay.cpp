@@ -43,7 +43,6 @@ void SimpleOverlay::draw() const
 		{
 			ImGui::Text("\nMouse Position: <invalid>");
 		}
-
-		ImGui::End();
 	}
+	ImGui::End();
 }
