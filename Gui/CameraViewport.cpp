@@ -18,10 +18,17 @@
 
 CameraViewport::CameraViewport()
 {
-	// nfx::Graphics::GL::Functions_4_5 f;
-	// f.initializeOpenGLFunctions();
-
-	// p_frameBuffer->release();
+	m_texture = new nfx::Graphics::GL::Texture2D{
+		nullptr,
+		0, 0,
+		nfx::Graphics::GL::TextureFormat::BGR,
+		nfx::Graphics::GL::TextureUnit::Unit0,
+		nfx::Graphics::GL::TextureType::Diffuse,
+		nfx::Graphics::GL::TextureMinFilter::Nearest,
+		nfx::Graphics::GL::TextureMagFilter::Nearest,
+		nfx::Graphics::GL::TextureWrapMode::ClampToBorder,
+		nfx::Graphics::GL::TextureWrapMode::ClampToBorder
+	};
 }
 
 CameraViewport::~CameraViewport()
@@ -30,62 +37,48 @@ CameraViewport::~CameraViewport()
 
 void CameraViewport::draw()
 {
-	if (!ok)
+	if (m_texture->width() != (short)m_frame.cols || m_texture->height() != (short)m_frame.rows)
 	{
-		return;
+		m_texture->resize((short)m_frame.cols, (short)m_frame.rows);
 	}
 
-	if (!m_frame.empty() && !oktowrite.load())
+	if (!m_waitingForFrame.load())
 	{
-		// nfx::Graphics::GL::Functions_4_5 f;
-		// f.initializeOpenGLFunctions();
-
-		static bool first{ true };
-
-		if (first)
-		{
-			m_texture = new nfx::Graphics::GL::Texture2D{
-				nullptr,
-				(short)m_frame.cols, (short)m_frame.rows,
-				nfx::Graphics::GL::TextureFormat::BGR,
-				nfx::Graphics::GL::TextureUnit::Unit0,
-				nfx::Graphics::GL::TextureType::Diffuse,
-				nfx::Graphics::GL::TextureMinFilter::Nearest,
-				nfx::Graphics::GL::TextureMagFilter::Nearest,
-				nfx::Graphics::GL::TextureWrapMode::ClampToBorder,
-				nfx::Graphics::GL::TextureWrapMode::ClampToBorder
-			};
-
-			first = false;
-		}
-
-		// m_texture->bind();
-
 		m_texture->update((char*)m_frame.ptr());
 
-		// m_texture->release();
-
-		oktowrite.store(true);
-	}
-
-	if (!m_texture)
-	{
-		return;
+		m_waitingForFrame.store(true);
 	}
 
 	if (ImGui::Begin("cam0"))
 	{
-		ImGui::Image((void*)(intptr_t)m_texture->id(), ImVec2(m_frame.cols, m_frame.rows));
+		auto viewportSize = ImGui::GetContentRegionAvail();
+		float imageAspectRatio = (float)m_frame.cols / (float)m_frame.rows;
+		float contentRegionAspectRatio = viewportSize.x / viewportSize.y;
+
+		if (contentRegionAspectRatio > imageAspectRatio)
+		{
+			float imageWidth = viewportSize.y * imageAspectRatio;
+			float xPadding = (viewportSize.x - imageWidth) / 2;
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + xPadding);
+			ImGui::Image((ImTextureID)(intptr_t)m_texture->id(), ImVec2(imageWidth, viewportSize.y));
+		}
+		else
+		{
+			float imageHeight = viewportSize.x / imageAspectRatio;
+			float yPadding = (viewportSize.y - imageHeight) / 2;
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + yPadding);
+			ImGui::Image((ImTextureID)(intptr_t)m_texture->id(), ImVec2(viewportSize.x, imageHeight));
+		}
 	}
+
 	ImGui::End();
 }
 
 void CameraViewport::setFrame(const cv::Mat& frame)
 {
-	if (oktowrite)
+	if (m_waitingForFrame.load())
 	{
 		m_frame = frame;
-		oktowrite.store(false);
-		ok = true;
+		m_waitingForFrame.store(false);
 	}
 }

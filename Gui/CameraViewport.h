@@ -39,7 +39,5 @@ private:
 
 	cv::Mat m_frame;
 
-	std::atomic<bool> oktowrite{ true };
-
-	bool ok{ false };
+	std::atomic<bool> m_waitingForFrame{ true };
 };
