@@ -2,7 +2,7 @@ set( NFX_OPTIMUS_FORCE_DISCRETE_GPU		ON		)
 set( NFX_PRINT_CMAKE_VARIABLES			OFF		)
 
 set( NFX_USE_SPDLOG						ON		)
-set( NFX_USE_CCACHE						ON		)
+set( NFX_USE_CCACHE						OFF		)
 set( NFX_USE_VCPKG						ON		)
 
 set( NFX_WITH_OPENGL					ON		)
