@@ -37,14 +37,14 @@ CameraViewport::~CameraViewport()
 
 void CameraViewport::draw()
 {
-	if (m_texture->width() != (short)m_frame.cols || m_texture->height() != (short)m_frame.rows)
+	if (m_texture->width() != (unsigned)m_frame.cols || m_texture->height() != (unsigned)m_frame.rows)
 	{
 		m_texture->resize((short)m_frame.cols, (short)m_frame.rows);
 	}
 
 	if (!m_waitingForFrame.load())
 	{
-		m_texture->update((char*)m_frame.ptr());
+		m_texture->update((void*)m_frame.ptr());
 
 		m_waitingForFrame.store(true);
 	}
