@@ -23,10 +23,10 @@ public:
 
 	float fps() const;
 
-	void registerFrameReadyCallback(std::function<void(const cv::Mat&)> p_frameReadyCallback);
+	void registerFrameReadyCallback(std::function<void(cv::Mat)> p_frameReadyCallback);
 
 private:
-	void onFrameReady() const;
+	void onFrameReady();
 
 private:
 	uint16_t m_hardwareIndex;
@@ -38,5 +38,7 @@ private:
 
 	float m_fps{ 0.f };
 
-	std::vector<std::function<void(const cv::Mat&)>> m_frameReadyCallbacks;
+	std::vector<std::function<void(cv::Mat)>> m_frameReadyCallbacks;
+
+	std::string m_fourCC{ 4 };
 };

@@ -74,7 +74,7 @@ void CameraViewport::draw()
 	ImGui::End();
 }
 
-void CameraViewport::setFrame(const cv::Mat& frame)
+void CameraViewport::setFrame(cv::Mat frame)
 {
 	if (m_waitingForFrame.load())
 	{

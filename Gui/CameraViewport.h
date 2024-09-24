@@ -30,7 +30,7 @@ public:
 	void draw();
 
 public:
-	void setFrame(const cv::Mat& frame);
+	void setFrame(cv::Mat frame);
 
 private:
 	GLuint imageTexture_cam0;

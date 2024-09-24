@@ -4,6 +4,8 @@
 
 #include <nfx/Utils/ElapsedTime.h>
 
+#include <spdlog/spdlog.h>
+
 VideoCaptureDevice::VideoCaptureDevice(uint16_t p_hardwareIndex) : m_hardwareIndex{ p_hardwareIndex }
 {
 }
@@ -22,6 +24,7 @@ bool VideoCaptureDevice::open(uint16_t p_width, uint16_t p_height, uint16_t p_fp
 
 #ifdef _WIN32
 	auto api = cv::CAP_DSHOW;
+	// auto api = cv::CAP_ANY;
 #elif defined __linux
 	auto api = cv::CAP_V4L2;
 #endif
@@ -35,8 +38,7 @@ bool VideoCaptureDevice::open(uint16_t p_width, uint16_t p_height, uint16_t p_fp
 			std::vector<int>{
 				cv::CAP_PROP_FRAME_WIDTH, p_width,
 				cv::CAP_PROP_FRAME_HEIGHT, p_height,
-				cv::CAP_PROP_FPS, p_fps,
-				cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('M', 'J', 'P', 'G') });
+				cv::CAP_PROP_FPS, p_fps });
 	}
 	catch (const std::exception& e)
 	{
@@ -47,10 +49,10 @@ bool VideoCaptureDevice::open(uint16_t p_width, uint16_t p_height, uint16_t p_fp
 	// jt.detach();
 	int fourcc = static_cast<int>(m_videoCapture.get(cv::CAP_PROP_FOURCC));
 
-	char FOURCC_STR[] = {
+	m_fourCC = {
 		(char)(fourcc & 0XFF), (char)((fourcc & 0XFF00) >> 8), (char)((fourcc & 0XFF0000) >> 16), (char)((fourcc & 0XFF000000) >> 24), 0
 	};
-	std::cout << "FOURCC is '" << FOURCC_STR << "'\n";
+	std::cout << "FOURCC is '" << m_fourCC << "'\n";
 
 	return ret;
 }
@@ -75,17 +77,20 @@ float VideoCaptureDevice::fps() const
 	return m_fps;
 }
 
-void VideoCaptureDevice::registerFrameReadyCallback(std::function<void(const cv::Mat&)> p_frameReadyCallback)
+void VideoCaptureDevice::registerFrameReadyCallback(std::function<void(cv::Mat)> p_frameReadyCallback)
 {
 	m_frameReadyCallbacks.push_back(p_frameReadyCallback);
 }
 
-void VideoCaptureDevice::onFrameReady() const
+void VideoCaptureDevice::onFrameReady()
 {
 	for (const auto& cb : m_frameReadyCallbacks)
 	{
-		cb(m_frame);
+		auto frame = m_frame.clone();
+		cb(frame);
 	}
+
+	m_frame = cv::Mat{};
 }
 
 void VideoCaptureDevice::aquireFrame(std::stop_token token)
@@ -96,14 +101,12 @@ void VideoCaptureDevice::aquireFrame(std::stop_token token)
 
 		try
 		{
-			m_videoCapture.read(m_frame);
-
-			if (!m_frame.empty())
+			if (m_videoCapture.read(m_frame))
 			{
-				// cv::imshow("img", m_frame);
-				// cv::waitKey(1);
-
-				onFrameReady();
+				if (!m_frame.empty())
+				{
+					onFrameReady();
+				}
 			}
 		}
 		catch (const std::exception& e)
