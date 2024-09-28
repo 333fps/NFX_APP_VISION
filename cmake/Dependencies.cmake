@@ -22,8 +22,7 @@ target_link_libraries( ${PROJECT_NAME} PUBLIC
 											nfxGraphicsGL
 											nfxWindow
 											nfxGUI
-											#nfxVideoCaptureDevice
-											nfxVideoCaptureDeviceInfo
+											nfxVideoCapture
 											#nfxTensorRTYoloV8Engine
 											#nfxCudaDevice
 )
