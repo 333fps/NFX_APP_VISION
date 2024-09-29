@@ -69,7 +69,11 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 
 	)
 
-	set( CMAKE_SHARED_LINKER_FLAGS /manifestuac:no )
+	set( CMAKE_SHARED_LINKER_FLAGS
+						/manifestuac:no
+#						/NOIMPLIB
+#						/NOEXP
+	)
 endif()
 
 if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )

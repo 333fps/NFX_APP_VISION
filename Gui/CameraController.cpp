@@ -14,6 +14,11 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 	unsigned i{ 0 };
 	for (const auto& device : videoDeviceInfoList)
 	{
+		// for (auto res: device.resolutions())
+		//{
+		//	std::cout << res.bitcount << "," << res.bitrate << "," << res.x << "," << res.y << std::endl;
+		// }
+
 		m_cbCameras.addItem(device.name());
 
 		m_cbCameras.setData(i, device.resolutions());

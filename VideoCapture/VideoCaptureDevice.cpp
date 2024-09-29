@@ -8,6 +8,7 @@
 
 VideoCaptureDevice::VideoCaptureDevice(uint16_t p_hardwareIndex) : m_hardwareIndex{ p_hardwareIndex }
 {
+	SPDLOG_INFO("m_hardwareIndex {}", m_hardwareIndex);
 }
 
 VideoCaptureDevice::~VideoCaptureDevice()
