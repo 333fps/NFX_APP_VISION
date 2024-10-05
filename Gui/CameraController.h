@@ -3,7 +3,8 @@
 #include <nfx/GUI/Combo.h>
 #include <nfx/GUI/CheckBox.h>
 
-#include "VideoCapture/VideoCaptureDevice.h"
+// #include "VideoCapture/VideoCaptureDevice.h"
+#include <nfx/VideoCapture/VideoCaptureDevice.h>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/videoio.hpp>
@@ -23,7 +24,7 @@ public:
 	void draw();
 
 private:
-	std::unique_ptr<VideoCaptureDevice> m_videoCaptureDevice;
+	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
 
 	nfx::GUI::Combo m_cbCameras;
 	nfx::GUI::Combo m_cbResolutions;

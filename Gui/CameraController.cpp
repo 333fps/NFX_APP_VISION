@@ -70,7 +70,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 {
 	if (b)
 	{
-		m_videoCaptureDevice.reset(new VideoCaptureDevice{ (uint16_t)m_cbCameras.currentIndex() });
+		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_cbCameras.currentIndex() });
 
 		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_cbCameras.data(m_cbCameras.currentIndex()));
 		const auto& resolution = data.at(m_cbResolutions.currentIndex());

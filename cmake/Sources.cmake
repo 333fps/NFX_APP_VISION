@@ -24,8 +24,8 @@ set( sources_files
 					"Gui/CameraViewport.h"
 					"Gui/CameraViewport.cpp"
 
-					"VideoCapture/VideoCaptureDevice.h"
-					"VideoCapture/VideoCaptureDevice.cpp"
+					#"VideoCapture/VideoCaptureDevice.h"
+					#"VideoCapture/VideoCaptureDevice.cpp"
 
 )
 
