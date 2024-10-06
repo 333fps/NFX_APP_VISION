@@ -21,7 +21,7 @@ CameraViewport::CameraViewport()
 	m_texture = new nfx::Graphics::GL::Texture2D{
 		nullptr,
 		0, 0,
-		nfx::Graphics::GL::TextureFormat::BGR,
+		nfx::Graphics::GL::TextureFormat::RGB,
 		nfx::Graphics::GL::TextureUnit::Unit0,
 		nfx::Graphics::GL::TextureType::Diffuse,
 		nfx::Graphics::GL::TextureMinFilter::Nearest,
