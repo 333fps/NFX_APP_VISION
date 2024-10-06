@@ -38,9 +38,6 @@ set( NFX_BUILD_CATENARY					OFF		)
 set( NFX_BUILD_VIDEOCAPTURE				ON		)
 set( NFX_BUILD_VISION					OFF		)
 
-#temp
-set( NFX_VIDEOCAPTURE_TEMP_WEBCAM_OPENCV OFF )
-
 add_subdirectory( $ENV{nfx_DIR} "nfxLibs" )
 
 
