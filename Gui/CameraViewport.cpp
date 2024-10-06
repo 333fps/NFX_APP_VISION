@@ -37,14 +37,14 @@ CameraViewport::~CameraViewport()
 
 void CameraViewport::draw()
 {
-	if (m_texture->width() != (unsigned)m_frame.cols || m_texture->height() != (unsigned)m_frame.rows)
+	if (m_texture->width() != (unsigned)m_frame.width || m_texture->height() != (unsigned)m_frame.height)
 	{
-		m_texture->resize((short)m_frame.cols, (short)m_frame.rows);
+		m_texture->resize((short)m_frame.width, (short)m_frame.height);
 	}
 
 	if (!m_waitingForFrame.load())
 	{
-		m_texture->update((void*)m_frame.ptr());
+		m_texture->update((void*)m_frame.pixels.data());
 
 		m_waitingForFrame.store(true);
 	}
@@ -52,7 +52,7 @@ void CameraViewport::draw()
 	if (ImGui::Begin("cam0"))
 	{
 		auto viewportSize = ImGui::GetContentRegionAvail();
-		float imageAspectRatio = (float)m_frame.cols / (float)m_frame.rows;
+		float imageAspectRatio = (float)m_frame.width / (float)m_frame.height;
 		float contentRegionAspectRatio = viewportSize.x / viewportSize.y;
 
 		if (contentRegionAspectRatio > imageAspectRatio)
@@ -74,7 +74,7 @@ void CameraViewport::draw()
 	ImGui::End();
 }
 
-void CameraViewport::setFrame(cv::Mat frame)
+void CameraViewport::setFrame(nfx::Graphics::Image frame)
 {
 	if (m_waitingForFrame.load())
 	{

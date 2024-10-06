@@ -6,8 +6,8 @@
 // #include "VideoCapture/VideoCaptureDevice.h"
 #include <nfx/VideoCapture/VideoCaptureDevice.h>
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/videoio.hpp>
+// #include <opencv2/opencv.hpp>
+// #include <opencv2/videoio.hpp>
 #include "CameraViewport.h"
 
 class CameraController final

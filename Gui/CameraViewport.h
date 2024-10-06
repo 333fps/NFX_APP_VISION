@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nfx/Graphics/Core/Image.h>
+
 namespace nfx
 {
 	namespace Graphics
@@ -11,8 +13,8 @@ namespace nfx
 	}
 }
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/videoio.hpp>
+// #include <opencv2/opencv.hpp>
+// #include <opencv2/videoio.hpp>
 
 #include <nfx/Graphics/GL/Definitions.h>
 
@@ -30,14 +32,14 @@ public:
 	void draw();
 
 public:
-	void setFrame(cv::Mat frame);
+	void setFrame(nfx::Graphics::Image frame);
 
 private:
 	GLuint imageTexture_cam0;
 
 	nfx::Graphics::GL::Texture2D* m_texture;
 
-	cv::Mat m_frame;
+	nfx::Graphics::Image m_frame;
 
 	std::atomic<bool> m_waitingForFrame{ true };
 };
