@@ -42,7 +42,7 @@ void CameraController::draw()
 		{
 			fps = m_videoCaptureDevice->fps();
 		}
-		ImGui::Text("CameraFPS %.2f ", fps);
+		ImGui::Text("CameraFPS %.3f ", fps);
 	}
 	ImGui::End();
 }
@@ -81,6 +81,5 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		m_videoCaptureDevice->close();
-		// m_videoCaptureDevice.reset();
 	}
 }
