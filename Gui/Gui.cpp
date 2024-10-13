@@ -10,8 +10,6 @@
 #include "CameraController.h"
 #include "CameraViewport.h"
 
-// #include "VideoCapture/VideoCaptureDevice.h"
-
 #include <nfx/VideoCapture/VideoCaptureDevice.h>
 
 GUI::GUI(nfx::Window::Window* p_window) : nfx::GUI::GUI{ p_window },
