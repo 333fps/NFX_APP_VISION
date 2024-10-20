@@ -1,6 +1,7 @@
 #include "CameraController.h"
 
 #include <nfx/VideoCapture/VideoCaptureDeviceInfo.h>
+#include <nfx/VideoCapture/VideoCaptureDevice.h>
 #include <nfx/VideoCapture/VideoResolution.h>
 #include <nfx/VideoCapture/Enums.h>
 
@@ -11,58 +12,64 @@
 
 CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraViewport{ p_cameraViewport }
 {
-	auto videoDeviceInfoList = nfx::VideoCaptureDeviceInfo::availableVideoDevices();
-	videoDeviceInfoList.sort();
+	{ // Combos
+		auto videoDeviceInfoList = nfx::VideoCaptureDeviceInfo::availableVideoDevices();
+		videoDeviceInfoList.sort();
 
-	unsigned i{ 0 };
-	for (const auto& device : videoDeviceInfoList)
-	{
-		m_cbCameras.addItem(device.name());
+		unsigned i{ 0 };
+		for (const auto& device : videoDeviceInfoList)
+		{
+			m_cbCameras.addItem(device.name());
 
-		m_cbCameras.setData(i, device.resolutions());
+			m_cbCameras.setData(i, device.resolutions());
 
-		++i;
+			++i;
+		}
 	}
 
-	m_brightnessSlider.setLabel("Brightness");
-	m_contrastSlider.setLabel("Contrast");
-	m_hueSlider.setLabel("Hue");
-	m_saturationSlider.setLabel("Saturation");
-	m_sharpnessSlider.setLabel("Sharpness");
-	m_gammaSlider.setLabel("Gamma");
-	m_whiteBalanceSlider.setLabel("White balance");
-	m_backLightCompensationSlider.setLabel("Backlight compensation");
-	m_gainSlider.setLabel("Gain");
+	{ // Sliders
+		m_brightnessSlider.setLabel("Brightness");
+		m_contrastSlider.setLabel("Contrast");
+		m_hueSlider.setLabel("Hue");
+		m_saturationSlider.setLabel("Saturation");
+		m_sharpnessSlider.setLabel("Sharpness");
+		m_gammaSlider.setLabel("Gamma");
+		m_whiteBalanceSlider.setLabel("White balance");
+		m_backLightCompensationSlider.setLabel("Backlight compensation");
+		m_gainSlider.setLabel("Gain");
 
-	m_panSlider.setLabel("Pan");
-	m_tiltSlider.setLabel("Tilt");
-	m_rollSlider.setLabel("Roll");
-	m_zoomSlider.setLabel("Zoom");
-	m_exposureSlider.setLabel("Exposure");
-	m_irisSlider.setLabel("Iris");
-	m_focusSlider.setLabel("Focus");
+		m_panSlider.setLabel("Pan");
+		m_tiltSlider.setLabel("Tilt");
+		m_rollSlider.setLabel("Roll");
+		m_zoomSlider.setLabel("Zoom");
+		m_exposureSlider.setLabel("Exposure");
+		m_irisSlider.setLabel("Iris");
+		m_focusSlider.setLabel("Focus");
+	}
 
-	m_cbCameras.registerIndexChangeCallback(std::bind(&CameraController::cameraIndexChanged, this, std::placeholders::_1));
+	{ // Callbacks
+		m_cbCameras.registerIndexChangeCallback(std::bind(&CameraController::cameraIndexChanged, this, std::placeholders::_1));
 
-	m_checkBox.registerStateChangeCallback(std::bind(&CameraController::cameraCheckBoxClicked, this, std::placeholders::_1));
+		m_checkBox.registerStateChangeCallback(std::bind(&CameraController::cameraCheckBoxClicked, this, std::placeholders::_1));
 
-	m_brightnessSlider.registerValueChangeCallback(std::bind(&CameraController::brightnessSliderValueChanged, this, std::placeholders::_1));
-	m_contrastSlider.registerValueChangeCallback(std::bind(&CameraController::contrastSliderValueChanged, this, std::placeholders::_1));
-	m_hueSlider.registerValueChangeCallback(std::bind(&CameraController::hueSliderValueChanged, this, std::placeholders::_1));
-	m_saturationSlider.registerValueChangeCallback(std::bind(&CameraController::saturationSliderValueChanged, this, std::placeholders::_1));
-	m_sharpnessSlider.registerValueChangeCallback(std::bind(&CameraController::sharpnessSliderValueChanged, this, std::placeholders::_1));
-	m_gammaSlider.registerValueChangeCallback(std::bind(&CameraController::gammaSliderValueChanged, this, std::placeholders::_1));
-	m_whiteBalanceSlider.registerValueChangeCallback(std::bind(&CameraController::whiteBalanceSliderValueChanged, this, std::placeholders::_1));
-	m_backLightCompensationSlider.registerValueChangeCallback(std::bind(&CameraController::backLightCompensationSliderValueChanged, this, std::placeholders::_1));
-	m_gainSlider.registerValueChangeCallback(std::bind(&CameraController::gainSliderValueChanged, this, std::placeholders::_1));
+		m_brightnessSlider.registerValueChangeCallback(std::bind(&CameraController::brightnessSliderValueChanged, this, std::placeholders::_1));
+		m_contrastSlider.registerValueChangeCallback(std::bind(&CameraController::contrastSliderValueChanged, this, std::placeholders::_1));
+		m_hueSlider.registerValueChangeCallback(std::bind(&CameraController::hueSliderValueChanged, this, std::placeholders::_1));
+		m_saturationSlider.registerValueChangeCallback(std::bind(&CameraController::saturationSliderValueChanged, this, std::placeholders::_1));
+		m_sharpnessSlider.registerValueChangeCallback(std::bind(&CameraController::sharpnessSliderValueChanged, this, std::placeholders::_1));
+		m_gammaSlider.registerValueChangeCallback(std::bind(&CameraController::gammaSliderValueChanged, this, std::placeholders::_1));
+		m_whiteBalanceSlider.registerValueChangeCallback(std::bind(&CameraController::whiteBalanceSliderValueChanged, this, std::placeholders::_1));
+		m_backLightCompensationSlider.registerValueChangeCallback(std::bind(&CameraController::backLightCompensationSliderValueChanged, this, std::placeholders::_1));
+		m_gainSlider.registerValueChangeCallback(std::bind(&CameraController::gainSliderValueChanged, this, std::placeholders::_1));
 
-	m_panSlider.registerValueChangeCallback(std::bind(&CameraController::panSliderValueChanged, this, std::placeholders::_1));
-	m_tiltSlider.registerValueChangeCallback(std::bind(&CameraController::tiltSliderValueChanged, this, std::placeholders::_1));
-	m_rollSlider.registerValueChangeCallback(std::bind(&CameraController::rollSliderValueChanged, this, std::placeholders::_1));
-	m_zoomSlider.registerValueChangeCallback(std::bind(&CameraController::zoomSliderValueChanged, this, std::placeholders::_1));
-	m_exposureSlider.registerValueChangeCallback(std::bind(&CameraController::exposureSliderValueChanged, this, std::placeholders::_1));
-	m_irisSlider.registerValueChangeCallback(std::bind(&CameraController::irisSliderValueChanged, this, std::placeholders::_1));
-	m_focusSlider.registerValueChangeCallback(std::bind(&CameraController::focusSliderValueChanged, this, std::placeholders::_1));
+		m_panSlider.registerValueChangeCallback(std::bind(&CameraController::panSliderValueChanged, this, std::placeholders::_1));
+		m_tiltSlider.registerValueChangeCallback(std::bind(&CameraController::tiltSliderValueChanged, this, std::placeholders::_1));
+		m_rollSlider.registerValueChangeCallback(std::bind(&CameraController::rollSliderValueChanged, this, std::placeholders::_1));
+		m_zoomSlider.registerValueChangeCallback(std::bind(&CameraController::zoomSliderValueChanged, this, std::placeholders::_1));
+		m_exposureSlider.registerValueChangeCallback(std::bind(&CameraController::exposureSliderValueChanged, this, std::placeholders::_1));
+		m_irisSlider.registerValueChangeCallback(std::bind(&CameraController::irisSliderValueChanged, this, std::placeholders::_1));
+		m_focusSlider.registerValueChangeCallback(std::bind(&CameraController::focusSliderValueChanged, this, std::placeholders::_1));
+	}
 }
 
 CameraController::~CameraController()
@@ -139,6 +146,10 @@ void CameraController::cameraCheckBoxClicked(bool b)
 
 		updateSettings();
 		updateControls();
+
+		{ // TODO
+			m_videoCaptureDevice->setAutoExposure(true);
+		}
 	}
 	else
 	{
@@ -277,7 +288,7 @@ void CameraController::focusSliderValueChanged(float)
 void CameraController::updateSettings()
 {
 	nfx::VideoCaptureCapabilityRange range{};
-	float currentValue{ 0.f };
+	// float currentValue{ 0.f };
 
 	{ // Brightness
 		range = m_videoCaptureDevice->range(nfx::VideoCaptureCapability::Brightness);

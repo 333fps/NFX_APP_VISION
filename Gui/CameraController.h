@@ -4,9 +4,12 @@
 #include <nfx/GUI/CheckBox.h>
 #include <nfx/GUI/Silder.h>
 
-#include <nfx/VideoCapture/VideoCaptureDevice.h>
-
 #include "CameraViewport.h"
+
+namespace nfx
+{
+	class VideoCaptureDevice;
+}
 
 class CameraController final
 {
@@ -48,6 +51,7 @@ private:
 	nfx::GUI::Slider m_focusSlider;
 
 private:
+	// Callbacks
 	void cameraIndexChanged(unsigned);
 	void cameraCheckBoxClicked(bool);
 
