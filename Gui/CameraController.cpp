@@ -19,12 +19,18 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 		unsigned i{ 0 };
 		for (const auto& device : videoDeviceInfoList)
 		{
-			m_cbCameras.addItem(device.name());
+			m_comboCameras.addItem(device.name());
 
-			m_cbCameras.setData(i, device.resolutions());
+			m_comboCameras.setData(i, device.resolutions());
 
 			++i;
 		}
+	}
+
+	{ // Checkboxes
+		m_checkBoxCamera.setLabel("Start/Stop");
+		m_checkBoxFlipH.setLabel("Flip horizontally");
+		m_checkBoxFlipV.setLabel("Flip vertically");
 	}
 
 	{ // Sliders
@@ -48,9 +54,9 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 	}
 
 	{ // Callbacks
-		m_cbCameras.registerIndexChangeCallback(std::bind(&CameraController::cameraIndexChanged, this, std::placeholders::_1));
+		m_comboCameras.registerIndexChangeCallback(std::bind(&CameraController::cameraIndexChanged, this, std::placeholders::_1));
 
-		m_checkBox.registerStateChangeCallback(std::bind(&CameraController::cameraCheckBoxClicked, this, std::placeholders::_1));
+		m_checkBoxCamera.registerStateChangeCallback(std::bind(&CameraController::cameraCheckBoxClicked, this, std::placeholders::_1));
 
 		m_brightnessSlider.registerValueChangeCallback(std::bind(&CameraController::brightnessSliderValueChanged, this, std::placeholders::_1));
 		m_contrastSlider.registerValueChangeCallback(std::bind(&CameraController::contrastSliderValueChanged, this, std::placeholders::_1));
@@ -69,6 +75,9 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 		m_exposureSlider.registerValueChangeCallback(std::bind(&CameraController::exposureSliderValueChanged, this, std::placeholders::_1));
 		m_irisSlider.registerValueChangeCallback(std::bind(&CameraController::irisSliderValueChanged, this, std::placeholders::_1));
 		m_focusSlider.registerValueChangeCallback(std::bind(&CameraController::focusSliderValueChanged, this, std::placeholders::_1));
+
+		m_checkBoxFlipH.registerStateChangeCallback(std::bind(&CameraController::checkBoxFlipHClicked, this, std::placeholders::_1));
+		m_checkBoxFlipV.registerStateChangeCallback(std::bind(&CameraController::checkBoxFlipVClicked, this, std::placeholders::_1));
 	}
 }
 
@@ -80,9 +89,13 @@ void CameraController::draw()
 {
 	if (ImGui::Begin("Camera controller", nullptr))
 	{
-		m_cbCameras.draw();
-		m_cbResolutions.draw();
-		m_checkBox.draw();
+		m_comboCameras.draw();
+		m_comboResolutions.draw();
+
+		m_checkBoxCamera.draw();
+		m_checkBoxFlipH.draw();
+		m_checkBoxFlipV.draw();
+
 		m_brightnessSlider.draw();
 		m_contrastSlider.draw();
 		m_hueSlider.draw();
@@ -113,28 +126,28 @@ void CameraController::draw()
 
 void CameraController::cameraIndexChanged(unsigned idx)
 {
-	m_cbResolutions.clear();
+	m_comboResolutions.clear();
 
-	const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_cbCameras.data(idx));
+	const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_comboCameras.data(idx));
 	for (const auto& res : data)
 	{
 		std::stringstream ss;
 		ss << res.x << "x" << res.y << "/" << res.bitcount << "bpp @" << res.fps << "fps ";
 
-		m_cbResolutions.addItem(ss.str());
+		m_comboResolutions.addItem(ss.str());
 	}
 
-	m_cbResolutions.setIndex(m_cbResolutions.count() - 1);
+	m_comboResolutions.setIndex(m_comboResolutions.count() - 1);
 }
 
 void CameraController::cameraCheckBoxClicked(bool b)
 {
 	if (b)
 	{
-		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_cbCameras.currentIndex() });
+		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_comboCameras.currentIndex() });
 
-		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_cbCameras.data(m_cbCameras.currentIndex()));
-		const auto& resolution = data.at(m_cbResolutions.currentIndex());
+		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_comboCameras.data(m_comboCameras.currentIndex()));
+		const auto& resolution = data.at(m_comboResolutions.currentIndex());
 
 		m_videoCaptureDevice->open(resolution.x, resolution.y, resolution.fps);
 
@@ -285,6 +298,16 @@ void CameraController::focusSliderValueChanged(float)
 	}
 }
 
+void CameraController::checkBoxFlipVClicked(bool b)
+{
+	m_videoCaptureDevice->flipVertically(b);
+}
+
+void CameraController::checkBoxFlipHClicked(bool b)
+{
+	m_videoCaptureDevice->flipHorizontally(b);
+}
+
 void CameraController::updateSettings()
 {
 	nfx::VideoCaptureCapabilityRange range{};
@@ -375,7 +398,7 @@ void CameraController::updateSettings()
 void CameraController::updateControls()
 {
 	nfx::VideoCaptureControlRange range{};
-	float currentValue{ 0.f };
+	//	float currentValue{ 0.f };
 
 	{ // Pan
 		range = m_videoCaptureDevice->range(nfx::VideoCaptureControl::Pan);

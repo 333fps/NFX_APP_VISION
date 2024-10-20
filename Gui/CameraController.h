@@ -27,10 +27,12 @@ public:
 private:
 	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
 
-	nfx::GUI::Combo m_cbCameras;
-	nfx::GUI::Combo m_cbResolutions;
+	nfx::GUI::Combo m_comboCameras;
+	nfx::GUI::Combo m_comboResolutions;
 
-	nfx::GUI::CheckBox m_checkBox;
+	nfx::GUI::CheckBox m_checkBoxCamera;
+	nfx::GUI::CheckBox m_checkBoxFlipH;
+	nfx::GUI::CheckBox m_checkBoxFlipV;
 
 	nfx::GUI::Slider m_brightnessSlider;
 	nfx::GUI::Slider m_contrastSlider;
@@ -72,6 +74,9 @@ private:
 	void exposureSliderValueChanged(float);
 	void irisSliderValueChanged(float);
 	void focusSliderValueChanged(float);
+
+	void checkBoxFlipVClicked(bool);
+	void checkBoxFlipHClicked(bool);
 
 private:
 	void updateSettings();
