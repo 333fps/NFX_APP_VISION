@@ -157,6 +157,11 @@ void CameraController::cameraCheckBoxClicked(bool b)
 				m_cameraViewport,
 				std::placeholders::_1));
 
+		if (!m_videoCaptureDevice->isOpen())
+		{
+			return;
+		}
+
 		updateSettings();
 		updateControls();
 
@@ -167,6 +172,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		m_videoCaptureDevice->close();
+		m_videoCaptureDevice.reset();
 	}
 }
 
