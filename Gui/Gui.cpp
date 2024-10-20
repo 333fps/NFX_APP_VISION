@@ -38,7 +38,7 @@ void GUI::draw(nfx::Graphics::Camera3D* p_cam)
 	m_cameraViewport->draw();
 
 	{
-		// ImGui::ShowDemoWindow(nullptr);
+		ImGui::ShowDemoWindow(nullptr);
 	}
 
 	endFrame();
