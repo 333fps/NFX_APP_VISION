@@ -30,6 +30,7 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 	{ // Checkboxes
 		m_checkBoxCamera.setLabel("Start/Stop");
 		m_checkBoxFlipH.setLabel("Flip horizontally");
+		m_checkBoxFlipH.setChecked(true);
 		m_checkBoxFlipV.setLabel("Flip vertically");
 	}
 
@@ -83,6 +84,10 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 
 CameraController::~CameraController()
 {
+	if (m_videoCaptureDevice)
+	{
+		m_videoCaptureDevice->close();
+	}
 }
 
 void CameraController::draw()
@@ -114,12 +119,10 @@ void CameraController::draw()
 		m_irisSlider.draw();
 		m_focusSlider.draw();
 
-		float fps{ 0.f };
 		if (m_videoCaptureDevice)
 		{
-			fps = m_videoCaptureDevice->fps();
+			ImGui::Text("CameraFPS %.3f ", m_videoCaptureDevice->fps());
 		}
-		ImGui::Text("CameraFPS %.3f ", fps);
 	}
 	ImGui::End();
 }
@@ -162,6 +165,15 @@ void CameraController::cameraCheckBoxClicked(bool b)
 			return;
 		}
 
+		if (m_checkBoxFlipH.isChecked())
+		{
+			m_videoCaptureDevice->flipHorizontally(true);
+		}
+		if (m_checkBoxFlipV.isChecked())
+		{
+			m_videoCaptureDevice->flipVertically(true);
+		}
+
 		updateSettings();
 		updateControls();
 
@@ -172,7 +184,6 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		m_videoCaptureDevice->close();
-		m_videoCaptureDevice.reset();
 	}
 }
 
@@ -306,12 +317,18 @@ void CameraController::focusSliderValueChanged(float)
 
 void CameraController::checkBoxFlipVClicked(bool b)
 {
-	m_videoCaptureDevice->flipVertically(b);
+	if (m_videoCaptureDevice)
+	{
+		m_videoCaptureDevice->flipVertically(b);
+	}
 }
 
 void CameraController::checkBoxFlipHClicked(bool b)
 {
-	m_videoCaptureDevice->flipHorizontally(b);
+	if (m_videoCaptureDevice)
+	{
+		m_videoCaptureDevice->flipHorizontally(b);
+	}
 }
 
 void CameraController::updateSettings()

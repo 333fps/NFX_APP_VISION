@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nfx/Graphics/Core/Image.h>
+#include <nfx/Graphics/GL/Definitions.h>
 
 namespace nfx
 {
@@ -12,11 +13,6 @@ namespace nfx
 		}
 	}
 }
-
-// #include <opencv2/opencv.hpp>
-// #include <opencv2/videoio.hpp>
-
-#include <nfx/Graphics/GL/Definitions.h>
 
 class CameraViewport final
 {
