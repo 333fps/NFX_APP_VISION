@@ -33,6 +33,7 @@ CameraViewport::CameraViewport()
 
 CameraViewport::~CameraViewport()
 {
+	delete m_texture;
 }
 
 void CameraViewport::draw()
@@ -49,7 +50,9 @@ void CameraViewport::draw()
 		m_waitingForFrame.store(true);
 	}
 
-	if (ImGui::Begin("cam0"))
+	ImGuiWindowFlags window_flags = 0;
+
+	if (ImGui::Begin("cam0", nullptr, window_flags))
 	{
 		auto viewportSize = ImGui::GetContentRegionAvail();
 		float imageAspectRatio = (float)m_frame.width / (float)m_frame.height;
