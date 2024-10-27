@@ -37,7 +37,7 @@ void SimpleOverlay::draw() const
 
 		if (ImGui::IsMousePosValid())
 		{
-			ImGui::Text("\nMouse Position: (%.1f,%.1f)", (float)m_window->mousePosition().x, (float)m_window->mousePosition().y);
+			ImGui::Text("\nMouse Position: (%.1f,%.1f)", (double)m_window->mousePosition().x, (double)m_window->mousePosition().y);
 		}
 		else
 		{

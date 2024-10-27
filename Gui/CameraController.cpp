@@ -121,7 +121,7 @@ void CameraController::draw()
 
 		if (m_videoCaptureDevice)
 		{
-			ImGui::Text("CameraFPS %.3f ", m_videoCaptureDevice->fps());
+			ImGui::Text("CameraFPS %.3f ", (double)m_videoCaptureDevice->fps());
 		}
 	}
 	ImGui::End();
@@ -162,8 +162,11 @@ void CameraController::cameraCheckBoxClicked(bool b)
 
 		if (!m_videoCaptureDevice->isOpen())
 		{
+			SPDLOG_ERROR("isclosed");
+
 			return;
 		}
+		SPDLOG_ERROR("isopen");
 
 		if (m_checkBoxFlipH.isChecked())
 		{
