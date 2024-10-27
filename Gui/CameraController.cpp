@@ -187,6 +187,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		m_videoCaptureDevice->close();
+		//m_videoCaptureDevice.release();
 	}
 }
 
