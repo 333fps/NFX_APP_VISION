@@ -102,7 +102,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
 								-Walloca
 								-Wcast-align
 								-Wcast-qual
-								-Wconversion
+								#-Wconversion
 								#						-Wctor-dtor-privacy
 								-Wdisabled-optimization
 								-Wdouble-promotion
@@ -133,7 +133,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
 								-Wreturn-type
 								-Wsequence-point
 								-Wshadow
-								-Wsign-conversion
+								#-Wsign-conversion
 								-Wsuggest-override
 								-Wswitch-default
 								-Wswitch-enum
@@ -176,7 +176,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
 								-Walloca
 								-Wcast-align
 								-Wcast-qual
-								-Wconversion
+								#-Wconversion
 								#						-Wctor-dtor-privacy
 								-Wdisabled-optimization
 								-Wdouble-promotion
@@ -207,7 +207,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
 								-Wreturn-type
 								-Wsequence-point
 								-Wshadow
-								-Wsign-conversion
+								#-Wsign-conversion
 								-Wsuggest-override
 								-Wswitch-default
 								-Wswitch-enum
