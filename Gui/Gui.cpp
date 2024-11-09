@@ -4,8 +4,6 @@
 
 #include <nfx/Graphics/Core/Camera3D.h>
 
-#include <imgui.h>
-
 #include "SimpleOverlay.h"
 #include "CameraController.h"
 #include "CameraViewport.h"
@@ -36,10 +34,6 @@ void GUI::draw(nfx::Graphics::Camera3D* p_cam)
 	m_simpleOverlay->draw();
 	m_cameraController->draw();
 	m_cameraViewport->draw();
-
-	{
-		// ImGui::ShowDemoWindow(nullptr);
-	}
 
 	endFrame();
 }

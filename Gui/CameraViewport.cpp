@@ -3,14 +3,7 @@
 #include <nfx/Graphics/GL/Objects/Texture2D.h>
 #include <nfx/Graphics/GL/Functions/Functions_4_5.h>
 
-#include <GL/glcorearb.h>
-#include <GL/gl.h>
-
-// #include <imgui.h>
-
 #include <spdlog/spdlog.h>
-
-#include <glm/glm.hpp>
 
 CameraViewport::CameraViewport() : nfx::GUI::Widget{ "Camera Viewport" }
 {
