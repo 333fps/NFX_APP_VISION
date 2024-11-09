@@ -5,12 +5,10 @@
 #include <nfx/VideoCapture/VideoResolution.h>
 #include <nfx/VideoCapture/Enums.h>
 
-// #include <imgui.h>
-// #include <implot.h>
-
 #include <spdlog/spdlog.h>
 
-CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraViewport{ p_cameraViewport }
+CameraController::CameraController(CameraViewport* p_cameraViewport) : nfx::GUI::Widget{ "Camera controller" },
+																	   m_cameraViewport{ p_cameraViewport }
 {
 	{ // Combos
 		auto videoDeviceInfoList = nfx::VideoCaptureDeviceInfo::availableVideoDevices();
@@ -82,34 +80,38 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 	}
 
 	{
-		m_vLayout.addWidget(&m_comboCameras);
-		m_vLayout.addWidget(&m_comboResolutions);
+		m_mainLayout.addWidget(&m_comboCameras);
+		m_mainLayout.addWidget(&m_comboResolutions);
 
-		m_vLayout.addWidget(&m_checkBoxCamera);
+		m_mainLayout.addWidget(&m_checkBoxCamera);
 
-		m_vLayout.addWidget(&m_hLayout);
+		m_mainLayout.addWidget(&m_hLayout);
 
 		m_hLayout.addWidget(&m_checkBoxFlipH);
 		m_hLayout.addWidget(&m_checkBoxFlipV);
 
-		m_vLayout.addWidget(&m_brightnessSlider);
-		m_vLayout.addWidget(&m_contrastSlider);
-		m_vLayout.addWidget(&m_hueSlider);
-		m_vLayout.addWidget(&m_saturationSlider);
-		m_vLayout.addWidget(&m_sharpnessSlider);
-		m_vLayout.addWidget(&m_gammaSlider);
-		m_vLayout.addWidget(&m_whiteBalanceSlider);
-		m_vLayout.addWidget(&m_backLightCompensationSlider);
-		m_vLayout.addWidget(&m_gainSlider);
+		m_mainLayout.addWidget(&m_brightnessSlider);
+		m_mainLayout.addWidget(&m_contrastSlider);
+		m_mainLayout.addWidget(&m_hueSlider);
+		m_mainLayout.addWidget(&m_saturationSlider);
+		m_mainLayout.addWidget(&m_sharpnessSlider);
+		m_mainLayout.addWidget(&m_gammaSlider);
+		m_mainLayout.addWidget(&m_whiteBalanceSlider);
+		m_mainLayout.addWidget(&m_backLightCompensationSlider);
+		m_mainLayout.addWidget(&m_gainSlider);
 
-		m_vLayout.addWidget(&m_panSlider);
-		m_vLayout.addWidget(&m_tiltSlider);
-		m_vLayout.addWidget(&m_rollSlider);
-		m_vLayout.addWidget(&m_zoomSlider);
-		m_vLayout.addWidget(&m_exposureSlider);
-		m_vLayout.addWidget(&m_irisSlider);
-		m_vLayout.addWidget(&m_focusSlider);
+		m_mainLayout.addWidget(&m_panSlider);
+		m_mainLayout.addWidget(&m_tiltSlider);
+		m_mainLayout.addWidget(&m_rollSlider);
+		m_mainLayout.addWidget(&m_zoomSlider);
+		m_mainLayout.addWidget(&m_exposureSlider);
+		m_mainLayout.addWidget(&m_irisSlider);
+		m_mainLayout.addWidget(&m_focusSlider);
+
+		m_mainLayout.addWidget(&m_cameraFPS);
 	}
+
+	setLayout(&m_mainLayout);
 }
 
 CameraController::~CameraController()
@@ -122,12 +124,12 @@ CameraController::~CameraController()
 
 void CameraController::draw()
 {
-	m_vLayout.draw();
+	if (m_videoCaptureDevice)
+	{
+		m_cameraFPS.setText(std::format("CameraFPS {:.3f}", m_videoCaptureDevice->fps()).c_str());
+	}
 
-	//	if (m_videoCaptureDevice)
-	//	{
-	//		ImGui::Text("CameraFPS %.3f ", (double)m_videoCaptureDevice->fps());
-	//	}
+	drawLayout();
 }
 
 void CameraController::cameraIndexChanged(unsigned idx)
@@ -172,6 +174,11 @@ void CameraController::cameraCheckBoxClicked(bool b)
 
 		SPDLOG_INFO("Capture device \"{}\" opened successfully.", m_comboCameras.currentText());
 
+		{
+			m_comboCameras.setEnable(false);
+			m_comboResolutions.setEnable(false);
+		}
+
 		if (m_checkBoxFlipH.isChecked())
 		{
 			m_videoCaptureDevice->flipHorizontally(true);
@@ -191,9 +198,16 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		m_videoCaptureDevice->close();
-		m_videoCaptureDevice.release();
 
-		SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras.currentText());
+		if (!m_videoCaptureDevice->isOpen())
+		{
+			SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras.currentText());
+
+			m_comboCameras.setEnable(true);
+			m_comboResolutions.setEnable(true);
+		}
+
+		m_videoCaptureDevice.release();
 	}
 }
 

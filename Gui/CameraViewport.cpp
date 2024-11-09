@@ -1,22 +1,18 @@
 #include "CameraViewport.h"
 
-// #include <nfx/VideoCapture/VideoCaptureDeviceInfo.h>
-// #include <nfx/VideoCapture/VideoResolution.h>
-
 #include <nfx/Graphics/GL/Objects/Texture2D.h>
 #include <nfx/Graphics/GL/Functions/Functions_4_5.h>
 
 #include <GL/glcorearb.h>
 #include <GL/gl.h>
 
-#include <imgui.h>
-#include <implot.h>
+// #include <imgui.h>
 
 #include <spdlog/spdlog.h>
 
 #include <glm/glm.hpp>
 
-CameraViewport::CameraViewport()
+CameraViewport::CameraViewport() : nfx::GUI::Widget{ "Camera Viewport" }
 {
 	m_frame.height = 0;
 	m_frame.width = 0;
@@ -32,11 +28,18 @@ CameraViewport::CameraViewport()
 		nfx::Graphics::GL::TextureWrapMode::ClampToBorder,
 		nfx::Graphics::GL::TextureWrapMode::ClampToBorder
 	};
+
+	m_image = new nfx::GUI::Image{ m_texture->id(), (short)m_frame.width, (short)m_frame.height };
+
+	m_mainLayout.addWidget(m_image);
+
+	setLayout(&m_mainLayout);
 }
 
 CameraViewport::~CameraViewport()
 {
 	delete m_texture;
+	delete m_image;
 }
 
 void CameraViewport::draw()
@@ -44,6 +47,7 @@ void CameraViewport::draw()
 	if (m_texture->width() != (unsigned)m_frame.width || m_texture->height() != (unsigned)m_frame.height)
 	{
 		m_texture->resize((short)m_frame.width, (short)m_frame.height);
+		m_image->resize((short)m_frame.width, (short)m_frame.height);
 	}
 
 	if (!m_waitingForFrame.load())
@@ -53,31 +57,7 @@ void CameraViewport::draw()
 		m_waitingForFrame.store(true);
 	}
 
-	ImGuiWindowFlags window_flags = 0;
-
-	if (ImGui::Begin("cam0", nullptr, window_flags))
-	{
-		auto viewportSize = ImGui::GetContentRegionAvail();
-		float imageAspectRatio = (float)m_frame.width / (float)m_frame.height;
-		float contentRegionAspectRatio = viewportSize.x / viewportSize.y;
-
-		if (contentRegionAspectRatio > imageAspectRatio)
-		{
-			float imageWidth = viewportSize.y * imageAspectRatio;
-			float xPadding = (viewportSize.x - imageWidth) / 2;
-			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + xPadding);
-			ImGui::Image((ImTextureID)(intptr_t)m_texture->id(), ImVec2(imageWidth, viewportSize.y));
-		}
-		else
-		{
-			float imageHeight = viewportSize.x / imageAspectRatio;
-			float yPadding = (viewportSize.y - imageHeight) / 2;
-			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + yPadding);
-			ImGui::Image((ImTextureID)(intptr_t)m_texture->id(), ImVec2(viewportSize.x, imageHeight));
-		}
-	}
-
-	ImGui::End();
+	drawLayout();
 }
 
 void CameraViewport::setFrame(nfx::Graphics::Image frame)

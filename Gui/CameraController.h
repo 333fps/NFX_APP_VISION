@@ -1,8 +1,10 @@
 #pragma once
 
+#include <nfx/GUI/Widget.h>
 #include <nfx/GUI/Combo.h>
 #include <nfx/GUI/CheckBox.h>
 #include <nfx/GUI/Slider.h>
+#include <nfx/GUI/Label.h>
 
 #include <nfx/GUI/VerticalLayout.h>
 #include <nfx/GUI/HorizontalLayout.h>
@@ -14,7 +16,7 @@ namespace nfx
 	class VideoCaptureDevice;
 }
 
-class CameraController final
+class CameraController final : public nfx::GUI::Widget
 {
 public:
 	CameraController(CameraViewport* p_cameraViewport);
@@ -23,14 +25,14 @@ public:
 	CameraController& operator=(const CameraController&) = delete;
 	CameraController(CameraController&&) = delete;
 	CameraController& operator=(CameraController&&) = delete;
-	~CameraController();
+	virtual ~CameraController();
 
-	void draw();
+	virtual void draw() override;
 
 private:
 	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
 
-	nfx::GUI::VerticalLayout m_vLayout;
+	nfx::GUI::VerticalLayout m_mainLayout;
 	nfx::GUI::HorizontalLayout m_hLayout;
 
 	nfx::GUI::Combo m_comboCameras;
@@ -57,6 +59,8 @@ private:
 	nfx::GUI::Slider m_exposureSlider;
 	nfx::GUI::Slider m_irisSlider;
 	nfx::GUI::Slider m_focusSlider;
+
+	nfx::GUI::Label m_cameraFPS;
 
 private:
 	// Callbacks
