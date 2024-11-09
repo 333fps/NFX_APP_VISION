@@ -9,9 +9,6 @@
 #include <nfx/Graphics/GL/Utils/Debugger.h>
 #include <nfx/Graphics/Core/Color.h>
 
-// #include <nfx/VideoCapture/VideoResolution.h>
-// #include <nfx/VideoCapture/VideoCaptureDeviceInfo.h>
-
 #include <nfx/Graphics/GL/Functions/Functions_4_5.h>
 
 #include "Gui/Gui.h"
@@ -48,7 +45,7 @@ int App::run(int argc, char* argv[])
 	{
 		std::vector<unsigned int> ignore{};
 		nfx::Graphics::GL::Debugger::init(ignore);
-		nfx::Graphics::GL::Debugger::breakOnError(false);
+		nfx::Graphics::GL::Debugger::breakOnError(true);
 		nfx::Graphics::GL::Debugger::breakOnWarning(false);
 		nfx::Graphics::GL::Debugger::setSeverityLevel(nfx::Graphics::GL::DebuggerSeverity::Notification);
 	}

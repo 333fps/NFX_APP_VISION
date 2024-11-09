@@ -18,6 +18,9 @@
 
 CameraViewport::CameraViewport()
 {
+	m_frame.height = 0;
+	m_frame.width = 0;
+
 	m_texture = new nfx::Graphics::GL::Texture2D{
 		nullptr,
 		0, 0,

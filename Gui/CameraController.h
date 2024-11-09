@@ -2,7 +2,10 @@
 
 #include <nfx/GUI/Combo.h>
 #include <nfx/GUI/CheckBox.h>
-#include <nfx/GUI/Silder.h>
+#include <nfx/GUI/Slider.h>
+
+#include <nfx/GUI/VerticalLayout.h>
+#include <nfx/GUI/HorizontalLayout.h>
 
 #include "CameraViewport.h"
 
@@ -26,6 +29,9 @@ public:
 
 private:
 	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
+
+	nfx::GUI::VerticalLayout m_vLayout;
+	nfx::GUI::HorizontalLayout m_hLayout;
 
 	nfx::GUI::Combo m_comboCameras;
 	nfx::GUI::Combo m_comboResolutions;

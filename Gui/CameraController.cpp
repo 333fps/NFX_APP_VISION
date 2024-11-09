@@ -5,8 +5,8 @@
 #include <nfx/VideoCapture/VideoResolution.h>
 #include <nfx/VideoCapture/Enums.h>
 
-#include <imgui.h>
-#include <implot.h>
+// #include <imgui.h>
+// #include <implot.h>
 
 #include <spdlog/spdlog.h>
 
@@ -80,6 +80,36 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : m_cameraV
 		m_checkBoxFlipH.registerStateChangeCallback(std::bind(&CameraController::checkBoxFlipHClicked, this, std::placeholders::_1));
 		m_checkBoxFlipV.registerStateChangeCallback(std::bind(&CameraController::checkBoxFlipVClicked, this, std::placeholders::_1));
 	}
+
+	{
+		m_vLayout.addWidget(&m_comboCameras);
+		m_vLayout.addWidget(&m_comboResolutions);
+
+		m_vLayout.addWidget(&m_checkBoxCamera);
+
+		m_vLayout.addWidget(&m_hLayout);
+
+		m_hLayout.addWidget(&m_checkBoxFlipH);
+		m_hLayout.addWidget(&m_checkBoxFlipV);
+
+		m_vLayout.addWidget(&m_brightnessSlider);
+		m_vLayout.addWidget(&m_contrastSlider);
+		m_vLayout.addWidget(&m_hueSlider);
+		m_vLayout.addWidget(&m_saturationSlider);
+		m_vLayout.addWidget(&m_sharpnessSlider);
+		m_vLayout.addWidget(&m_gammaSlider);
+		m_vLayout.addWidget(&m_whiteBalanceSlider);
+		m_vLayout.addWidget(&m_backLightCompensationSlider);
+		m_vLayout.addWidget(&m_gainSlider);
+
+		m_vLayout.addWidget(&m_panSlider);
+		m_vLayout.addWidget(&m_tiltSlider);
+		m_vLayout.addWidget(&m_rollSlider);
+		m_vLayout.addWidget(&m_zoomSlider);
+		m_vLayout.addWidget(&m_exposureSlider);
+		m_vLayout.addWidget(&m_irisSlider);
+		m_vLayout.addWidget(&m_focusSlider);
+	}
 }
 
 CameraController::~CameraController()
@@ -92,39 +122,12 @@ CameraController::~CameraController()
 
 void CameraController::draw()
 {
-	if (ImGui::Begin("Camera controller", nullptr))
-	{
-		m_comboCameras.draw();
-		m_comboResolutions.draw();
+	m_vLayout.draw();
 
-		m_checkBoxCamera.draw();
-		m_checkBoxFlipH.draw();
-		m_checkBoxFlipV.draw();
-
-		m_brightnessSlider.draw();
-		m_contrastSlider.draw();
-		m_hueSlider.draw();
-		m_saturationSlider.draw();
-		m_sharpnessSlider.draw();
-		m_gammaSlider.draw();
-		m_whiteBalanceSlider.draw();
-		m_backLightCompensationSlider.draw();
-		m_gainSlider.draw();
-
-		m_panSlider.draw();
-		m_tiltSlider.draw();
-		m_rollSlider.draw();
-		m_zoomSlider.draw();
-		m_exposureSlider.draw();
-		m_irisSlider.draw();
-		m_focusSlider.draw();
-
-		if (m_videoCaptureDevice)
-		{
-			ImGui::Text("CameraFPS %.3f ", (double)m_videoCaptureDevice->fps());
-		}
-	}
-	ImGui::End();
+	//	if (m_videoCaptureDevice)
+	//	{
+	//		ImGui::Text("CameraFPS %.3f ", (double)m_videoCaptureDevice->fps());
+	//	}
 }
 
 void CameraController::cameraIndexChanged(unsigned idx)
@@ -140,7 +143,7 @@ void CameraController::cameraIndexChanged(unsigned idx)
 		m_comboResolutions.addItem(ss.str());
 	}
 
-	m_comboResolutions.setIndex(m_comboResolutions.count() - 1);
+	m_comboResolutions.setCurrentIndex(m_comboResolutions.count() - 1);
 }
 
 void CameraController::cameraCheckBoxClicked(bool b)
@@ -149,10 +152,17 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	{
 		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_comboCameras.currentIndex() });
 
-		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_comboCameras.data(m_comboCameras.currentIndex()));
+		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_comboCameras.currentData());
 		const auto& resolution = data.at(m_comboResolutions.currentIndex());
 
 		m_videoCaptureDevice->open(resolution.x, resolution.y, resolution.fps);
+
+		if (!m_videoCaptureDevice->isOpen())
+		{
+			SPDLOG_ERROR("Failed to open Capture device \"{}\".", m_comboCameras.currentText());
+
+			return;
+		}
 
 		m_videoCaptureDevice->registerFrameReadyCallback(
 			std::bind(
@@ -160,13 +170,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 				m_cameraViewport,
 				std::placeholders::_1));
 
-		if (!m_videoCaptureDevice->isOpen())
-		{
-			SPDLOG_ERROR("isclosed");
-
-			return;
-		}
-		SPDLOG_ERROR("isopen");
+		SPDLOG_INFO("Capture device \"{}\" opened successfully.", m_comboCameras.currentText());
 
 		if (m_checkBoxFlipH.isChecked())
 		{
@@ -187,7 +191,9 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		m_videoCaptureDevice->close();
-		//m_videoCaptureDevice.release();
+		m_videoCaptureDevice.release();
+
+		SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras.currentText());
 	}
 }
 
