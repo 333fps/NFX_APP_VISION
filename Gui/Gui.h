@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nfx/GUI/GUI.h>
+// #include <nfx/GUI/GUI.h>
 
 #include <nfx/GUI/MainWidget.h>
 #include <nfx/GUI/GridLayout.h>
