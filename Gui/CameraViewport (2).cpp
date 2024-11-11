@@ -5,7 +5,7 @@
 
 #include <spdlog/spdlog.h>
 
-CameraViewport::CameraViewport() : nfx::GUI::GroupBox{ "Camera Viewport" }
+CameraViewport::CameraViewport() : nfx::GUI::Widget{ "Camera Viewport" }
 {
 	m_frame.height = 0;
 	m_frame.width = 0;
@@ -24,7 +24,7 @@ CameraViewport::CameraViewport() : nfx::GUI::GroupBox{ "Camera Viewport" }
 
 	m_image = new nfx::GUI::Image{ m_texture->id(), (short)m_frame.width, (short)m_frame.height };
 
-	m_mainLayout.addWidget(m_image, 0, 0);
+	m_mainLayout.addWidget(m_image);
 
 	setLayout(&m_mainLayout);
 }
@@ -53,8 +53,7 @@ void CameraViewport::update()
 
 void CameraViewport::draw()
 {
-	// drawLayout();
-	nfx::GUI::GroupBox::draw();
+	drawLayout();
 }
 
 void CameraViewport::setFrame(nfx::Graphics::Image frame)

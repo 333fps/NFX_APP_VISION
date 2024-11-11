@@ -45,6 +45,7 @@ private:
 private:
 	std::unique_ptr<nfx::Window::Window> m_window;
 	std::unique_ptr<nfx::Window::Context> m_context;
+
 	std::unique_ptr<::GUI> m_gui;
 
 	std::unique_ptr<nfx::Graphics::GL::Renderer> m_renderer;

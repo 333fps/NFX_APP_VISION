@@ -7,7 +7,7 @@
 
 #include <spdlog/spdlog.h>
 
-CameraController::CameraController(CameraViewport* p_cameraViewport) : nfx::GUI::GroupBox{ "Camera controller" },
+CameraController::CameraController(CameraViewport* p_cameraViewport) : nfx::GUI::Widget{ "Camera controller" },
 																	   m_cameraViewport{ p_cameraViewport }
 {
 	{ // Combos
@@ -85,7 +85,7 @@ CameraController::CameraController(CameraViewport* p_cameraViewport) : nfx::GUI:
 
 		m_mainLayout.addWidget(&m_checkBoxCamera);
 
-		m_mainLayout.addLayout(&m_hLayout);
+		m_mainLayout.addWidget(&m_hLayout);
 
 		m_hLayout.addWidget(&m_checkBoxFlipH);
 		m_hLayout.addWidget(&m_checkBoxFlipV);
@@ -132,8 +132,7 @@ void CameraController::update()
 
 void CameraController::draw()
 {
-	// drawLayout();
-	nfx::GUI::GroupBox::draw();
+	drawLayout();
 }
 
 void CameraController::cameraIndexChanged(unsigned idx)

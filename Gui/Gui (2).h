@@ -2,14 +2,15 @@
 
 #include <nfx/GUI/GUI.h>
 
-#include <nfx/GUI/MainWidget.h>
-#include <nfx/GUI/GridLayout.h>
-
 namespace nfx
 {
 	namespace Window
 	{
 		class Window;
+	}
+	namespace Graphics
+	{
+		class Camera3D;
 	}
 }
 
@@ -17,7 +18,7 @@ class SimpleOverlay;
 class CameraController;
 class CameraViewport;
 
-class GUI : public nfx::GUI::MainWidget
+class GUI : public nfx::GUI::GUI
 {
 public:
 	explicit GUI(nfx::Window::Window* p_window);
@@ -29,10 +30,11 @@ public:
 	virtual ~GUI();
 
 	void update();
+	void draw(nfx::Graphics::Camera3D* p_cam = nullptr);
+
+	nfx::Window::Window* m_window = nullptr;
 
 private:
-	nfx::GUI::GridLayout m_gridLayout{ 2, 2 };
-
 	SimpleOverlay* m_simpleOverlay = nullptr;
 	CameraViewport* m_cameraViewport = nullptr;
 	CameraController* m_cameraController = nullptr;

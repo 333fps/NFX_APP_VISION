@@ -1,7 +1,6 @@
 #pragma once
 
-#include <nfx/GUI/GroupBox.h>
-
+#include <nfx/GUI/Widget.h>
 #include <nfx/GUI/VerticalLayout.h>
 #include <nfx/GUI/Label.h>
 
@@ -10,7 +9,7 @@ namespace nfx::Window
 	class Window;
 }
 
-class SimpleOverlay final : public nfx::GUI::GroupBox
+class SimpleOverlay final : public nfx::GUI::Widget
 {
 public:
 	SimpleOverlay(nfx::Window::Window* p_window);
@@ -31,7 +30,7 @@ private:
 	const char* m_OpenGlVersion = nullptr;
 
 private:
-	nfx::GUI::VerticalLayout* m_Vlayout;
+	nfx::GUI::VerticalLayout m_layout;
 	nfx::GUI::Label m_lblHardwareinfo;
 	nfx::GUI::Label m_lblHardwareinfoValue;
 	nfx::GUI::Label m_lblOpenGLinfo;

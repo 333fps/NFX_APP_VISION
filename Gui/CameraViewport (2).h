@@ -1,11 +1,13 @@
 #pragma once
 
-#include <nfx/GUI/GroupBox.h>
+#include <nfx/GUI/Widget.h>
+
+#include <nfx/GUI/Image.h>
+
+#include <nfx/GUI/VerticalLayout.h>
 
 #include <nfx/Graphics/Core/Image.h>
-
-#include <nfx/GUI/GridLayout.h>
-#include <nfx/GUI/Image.h>
+#include <nfx/Graphics/GL/Definitions.h>
 
 namespace nfx
 {
@@ -18,7 +20,7 @@ namespace nfx
 	}
 }
 
-class CameraViewport final : public nfx::GUI::GroupBox
+class CameraViewport final : public nfx::GUI::Widget
 {
 public:
 	CameraViewport();
@@ -41,6 +43,6 @@ private:
 
 	std::atomic<bool> m_waitingForFrame{ true };
 
-	nfx::GUI::GridLayout m_mainLayout{ 1, 1 };
+	nfx::GUI::VerticalLayout m_mainLayout;
 	nfx::GUI::Image* m_image;
 };

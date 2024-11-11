@@ -1,13 +1,13 @@
 #pragma once
 
-#include <nfx/GUI/GroupBox.h>
-
-#include <nfx/GUI/VerticalLayout.h>
-#include <nfx/GUI/HorizontalLayout.h>
+#include <nfx/GUI/Widget.h>
 #include <nfx/GUI/Combo.h>
 #include <nfx/GUI/CheckBox.h>
 #include <nfx/GUI/Slider.h>
 #include <nfx/GUI/Label.h>
+
+#include <nfx/GUI/VerticalLayout.h>
+#include <nfx/GUI/HorizontalLayout.h>
 
 #include "CameraViewport.h"
 
@@ -16,7 +16,7 @@ namespace nfx
 	class VideoCaptureDevice;
 }
 
-class CameraController final : public nfx::GUI::GroupBox
+class CameraController final : public nfx::GUI::Widget
 {
 public:
 	CameraController(CameraViewport* p_cameraViewport);
