@@ -15,8 +15,8 @@ GUI::GUI(nfx::Window::Window* p_window) : nfx::GUI::MainWidget{ p_window },
 {
 	auto centralWidget = this->centralWidget();
 
-	m_gridLayout.setPaddingX(5);
-	m_gridLayout.setPaddingY(5);
+	// m_gridLayout.setPaddingX(5);
+	// m_gridLayout.setPaddingY(5);
 
 	m_gridLayout.addWidget(m_cameraController, 0, 0);
 	m_gridLayout.addWidget(m_cameraViewport, 0, 1);
