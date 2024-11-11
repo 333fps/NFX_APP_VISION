@@ -20,6 +20,7 @@ public:
 	SimpleOverlay& operator=(SimpleOverlay&&) = delete;
 	virtual ~SimpleOverlay();
 
+	virtual void update() override;
 	virtual void draw() override;
 
 private:

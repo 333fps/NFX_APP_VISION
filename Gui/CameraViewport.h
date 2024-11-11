@@ -30,6 +30,7 @@ public:
 	CameraViewport& operator=(CameraViewport&&) = delete;
 	virtual ~CameraViewport();
 
+	virtual void update() override;
 	virtual void draw() override;
 
 public:

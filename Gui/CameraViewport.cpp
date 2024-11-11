@@ -35,7 +35,7 @@ CameraViewport::~CameraViewport()
 	delete m_image;
 }
 
-void CameraViewport::draw()
+void CameraViewport::update()
 {
 	if (m_texture->width() != (unsigned)m_frame.width || m_texture->height() != (unsigned)m_frame.height)
 	{
@@ -49,7 +49,10 @@ void CameraViewport::draw()
 
 		m_waitingForFrame.store(true);
 	}
+}
 
+void CameraViewport::draw()
+{
 	drawLayout();
 }
 

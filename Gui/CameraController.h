@@ -27,6 +27,7 @@ public:
 	CameraController& operator=(CameraController&&) = delete;
 	virtual ~CameraController();
 
+	virtual void update() override;
 	virtual void draw() override;
 
 private:

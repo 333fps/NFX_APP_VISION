@@ -29,6 +29,7 @@ public:
 	GUI& operator=(GUI&&) = delete;
 	virtual ~GUI();
 
+	void update();
 	void draw(nfx::Graphics::Camera3D* p_cam = nullptr);
 
 	nfx::Window::Window* m_window = nullptr;

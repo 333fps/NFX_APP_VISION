@@ -122,6 +122,10 @@ CameraController::~CameraController()
 	}
 }
 
+void CameraController::update()
+{
+}
+
 void CameraController::draw()
 {
 	if (m_videoCaptureDevice)

@@ -35,6 +35,10 @@ SimpleOverlay::~SimpleOverlay()
 {
 }
 
+void SimpleOverlay::update()
+{
+}
+
 void SimpleOverlay::draw()
 {
 	m_lblFramerate.setText(std::format("Framerate {:.2f}FPS / Frametime {:.4f}ms", 1. / m_window->deltaTime(), m_window->deltaTime()).c_str());
