@@ -209,6 +209,67 @@ void CameraController::cameraCheckBoxClicked(bool b)
 
 			m_comboCameras.setEnable(true);
 			m_comboResolutions.setEnable(true);
+
+			m_backLightCompensationSlider.setValue(0);
+			m_backLightCompensationSlider.setEnable(false);
+
+			{
+				m_brightnessSlider.setValue(0);
+				m_contrastSlider.setValue(0);
+				m_hueSlider.setValue(0);
+				m_saturationSlider.setValue(0);
+				m_sharpnessSlider.setValue(0);
+				m_gammaSlider.setValue(0);
+				m_whiteBalanceSlider.setValue(0);
+				m_backLightCompensationSlider.setValue(0);
+				m_gainSlider.setValue(0);
+
+				m_brightnessSlider.setRange(0, 0, 0, 0);
+				m_contrastSlider.setRange(0, 0, 0, 0);
+				m_hueSlider.setRange(0, 0, 0, 0);
+				m_saturationSlider.setRange(0, 0, 0, 0);
+				m_sharpnessSlider.setRange(0, 0, 0, 0);
+				m_gammaSlider.setRange(0, 0, 0, 0);
+				m_whiteBalanceSlider.setRange(0, 0, 0, 0);
+				m_backLightCompensationSlider.setRange(0, 0, 0, 0);
+				m_gainSlider.setRange(0, 0, 0, 0);
+
+				m_brightnessSlider.setEnable(false);
+				m_contrastSlider.setEnable(false);
+				m_hueSlider.setEnable(false);
+				m_saturationSlider.setEnable(false);
+				m_sharpnessSlider.setEnable(false);
+				m_gammaSlider.setEnable(false);
+				m_whiteBalanceSlider.setEnable(false);
+				m_backLightCompensationSlider.setEnable(false);
+				m_gainSlider.setEnable(false);
+			}
+
+			{
+				m_panSlider.setValue(0);
+				m_tiltSlider.setValue(0);
+				m_rollSlider.setValue(0);
+				m_zoomSlider.setValue(0);
+				m_exposureSlider.setValue(0);
+				m_irisSlider.setValue(0);
+				m_focusSlider.setValue(0);
+
+				m_panSlider.setRange(0, 0, 0, 0);
+				m_tiltSlider.setRange(0, 0, 0, 0);
+				m_rollSlider.setRange(0, 0, 0, 0);
+				m_zoomSlider.setRange(0, 0, 0, 0);
+				m_exposureSlider.setRange(0, 0, 0, 0);
+				m_irisSlider.setRange(0, 0, 0, 0);
+				m_focusSlider.setRange(0, 0, 0, 0);
+
+				m_panSlider.setEnable(false);
+				m_tiltSlider.setEnable(false);
+				m_rollSlider.setEnable(false);
+				m_zoomSlider.setEnable(false);
+				m_exposureSlider.setEnable(false);
+				m_irisSlider.setEnable(false);
+				m_focusSlider.setEnable(false);
+			}
 		}
 
 		m_videoCaptureDevice.release();
@@ -362,15 +423,22 @@ void CameraController::checkBoxFlipHClicked(bool b)
 void CameraController::updateSettings()
 {
 	nfx::VideoCaptureCapabilityRange range{};
-	// float currentValue{ 0.f };
 
 	{ // Brightness
 		range = m_videoCaptureDevice->range(nfx::VideoCaptureCapability::Brightness);
 		m_brightnessSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_brightnessSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Brightness);
-		// m_brightnessSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_brightnessSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_brightnessSlider.setValue(range.dflt);
+			m_brightnessSlider.setEnable(true);
+		}
+		else
+		{
+			m_brightnessSlider.setEnable(false);
+		}
 	}
 
 	{ // Contrast
@@ -378,8 +446,16 @@ void CameraController::updateSettings()
 		m_contrastSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_contrastSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Contrast);
-		// m_contrastSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_contrastSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_contrastSlider.setValue(range.dflt);
+			m_contrastSlider.setEnable(true);
+		}
+		else
+		{
+			m_contrastSlider.setEnable(false);
+		}
 	}
 
 	{ // Hue
@@ -387,8 +463,16 @@ void CameraController::updateSettings()
 		m_hueSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_hueSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Hue);
-		// m_hueSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_hueSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_hueSlider.setValue(range.dflt);
+			m_hueSlider.setEnable(true);
+		}
+		else
+		{
+			m_hueSlider.setEnable(false);
+		}
 	}
 
 	{ // Saturation
@@ -396,8 +480,16 @@ void CameraController::updateSettings()
 		m_saturationSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_saturationSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Saturation);
-		// m_saturationSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_saturationSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_saturationSlider.setValue(range.dflt);
+			m_saturationSlider.setEnable(true);
+		}
+		else
+		{
+			m_saturationSlider.setEnable(false);
+		}
 	}
 
 	{ // Sharpness
@@ -405,8 +497,16 @@ void CameraController::updateSettings()
 		m_sharpnessSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_sharpnessSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Sharpness);
-		// m_sharpnessSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_sharpnessSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_sharpnessSlider.setValue(range.dflt);
+			m_sharpnessSlider.setEnable(true);
+		}
+		else
+		{
+			m_sharpnessSlider.setEnable(false);
+		}
 	}
 
 	{ // Gamma
@@ -414,8 +514,16 @@ void CameraController::updateSettings()
 		m_gammaSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_gammaSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Gamma);
-		// m_gammaSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_gammaSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_gammaSlider.setValue(range.dflt);
+			m_gammaSlider.setEnable(true);
+		}
+		else
+		{
+			m_gammaSlider.setEnable(false);
+		}
 	}
 
 	{ // WhiteBalance
@@ -423,8 +531,16 @@ void CameraController::updateSettings()
 		m_whiteBalanceSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_whiteBalanceSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::WhiteBalance);
-		// m_whiteBalanceSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_whiteBalanceSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_whiteBalanceSlider.setValue(range.dflt);
+			m_whiteBalanceSlider.setEnable(true);
+		}
+		else
+		{
+			m_whiteBalanceSlider.setEnable(false);
+		}
 	}
 
 	{ // BacklightCompensation
@@ -432,32 +548,53 @@ void CameraController::updateSettings()
 		m_backLightCompensationSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_backLightCompensationSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::BacklightCompensation);
-		// m_backLightCompensationSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_backLightCompensationSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_backLightCompensationSlider.setValue(range.dflt);
+			m_backLightCompensationSlider.setEnable(true);
+		}
+		else
+		{
+			m_backLightCompensationSlider.setEnable(false);
+		}
 	}
 
 	{ // Gain
 		range = m_videoCaptureDevice->range(nfx::VideoCaptureCapability::Gain);
-		m_gainSlider.setRange(range.min, range.max, range.step, range.dflt);
-		m_gainSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureCapability::Gain);
-		// m_gainSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_gainSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_gainSlider.setValue(range.dflt);
+			m_gainSlider.setEnable(true);
+		}
+		else
+		{
+			m_gainSlider.setEnable(false);
+		}
 	}
 }
 
 void CameraController::updateControls()
 {
 	nfx::VideoCaptureControlRange range{};
-	//	float currentValue{ 0.f };
 
 	{ // Pan
 		range = m_videoCaptureDevice->range(nfx::VideoCaptureControl::Pan);
 		m_panSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_panSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Pan);
-		// m_panSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_panSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_panSlider.setValue(range.dflt);
+			m_panSlider.setEnable(true);
+		}
+		else
+		{
+			m_panSlider.setEnable(false);
+		}
 	}
 
 	{ // Tilt
@@ -465,8 +602,16 @@ void CameraController::updateControls()
 		m_tiltSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_tiltSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Tilt);
-		// m_tiltSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_tiltSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_tiltSlider.setValue(range.dflt);
+			m_tiltSlider.setEnable(true);
+		}
+		else
+		{
+			m_tiltSlider.setEnable(false);
+		}
 	}
 
 	{ // Roll
@@ -474,8 +619,16 @@ void CameraController::updateControls()
 		m_rollSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_rollSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Roll);
-		// m_rollSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_rollSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_rollSlider.setValue(range.dflt);
+			m_rollSlider.setEnable(true);
+		}
+		else
+		{
+			m_rollSlider.setEnable(false);
+		}
 	}
 
 	{ // Zoom
@@ -483,8 +636,16 @@ void CameraController::updateControls()
 		m_zoomSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_zoomSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Zoom);
-		// m_zoomSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_zoomSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_zoomSlider.setValue(range.dflt);
+			m_zoomSlider.setEnable(true);
+		}
+		else
+		{
+			m_zoomSlider.setEnable(false);
+		}
 	}
 
 	{ // Exposure
@@ -492,8 +653,16 @@ void CameraController::updateControls()
 		m_exposureSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_exposureSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Exposure);
-		// m_exposureSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_exposureSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_exposureSlider.setValue(range.dflt);
+			m_exposureSlider.setEnable(true);
+		}
+		else
+		{
+			m_exposureSlider.setEnable(false);
+		}
 	}
 
 	{ // Iris
@@ -501,8 +670,16 @@ void CameraController::updateControls()
 		m_irisSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_irisSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Iris);
-		// m_irisSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_irisSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_irisSlider.setValue(range.dflt);
+			m_irisSlider.setEnable(true);
+		}
+		else
+		{
+			m_irisSlider.setEnable(false);
+		}
 	}
 
 	{ // Focus
@@ -510,7 +687,15 @@ void CameraController::updateControls()
 		m_focusSlider.setRange(range.min, range.max, range.step, range.dflt);
 		m_focusSlider.setValue(range.dflt);
 
-		// currentValue = m_videoCaptureDevice->getCurrentValue(nfx::VideoCaptureControl::Focus);
-		// m_focusSlider.setValue(currentValue);
+		if (range.max != 0)
+		{
+			m_focusSlider.setRange(range.min, range.max, range.step, range.dflt);
+			m_focusSlider.setValue(range.dflt);
+			m_focusSlider.setEnable(true);
+		}
+		else
+		{
+			m_focusSlider.setEnable(false);
+		}
 	}
 }
