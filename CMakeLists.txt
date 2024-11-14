@@ -1,5 +1,5 @@
 #
-#	NFX_SANDBOX
+#	NFX_APP_VISION
 #
 #	Main cmake file
 #
