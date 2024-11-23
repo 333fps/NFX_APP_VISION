@@ -26,7 +26,7 @@ public:
 	GUI& operator=(GUI&&) = delete;
 	virtual ~GUI();
 
-	void update();
+	virtual void update() override;
 
 private:
 	nfx::GUI::GridLayout m_gridLayout{ 2, 2 };

@@ -192,6 +192,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
 								#						-Wno-comment
 								#						-Wno-delete-non-virtual-dtor
 								#						-Wno-deprecated-copy
+														-Wno-deprecated
 								#						-Wno-dev
 								#						-Wno-long-long
 								#						-Wno-strict-overflow

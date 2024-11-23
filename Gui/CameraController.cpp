@@ -126,7 +126,7 @@ void CameraController::update()
 {
 	if (m_videoCaptureDevice)
 	{
-		m_cameraFPS.setText(std::format("CameraFPS {:.3f}", m_videoCaptureDevice->fps()).c_str());
+		//m_cameraFPS.setText(std::format("CameraFPS {:.3f}", m_videoCaptureDevice->fps()).c_str());
 	}
 }
 

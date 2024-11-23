@@ -40,12 +40,12 @@ SimpleOverlay::~SimpleOverlay()
 
 void SimpleOverlay::update()
 {
-	m_lblFramerate.setText(std::format("Framerate {:.2f}FPS / Frametime {:.4f}ms", 1. / m_window->deltaTime(), m_window->deltaTime()));
+	//m_lblFramerate.setText(std::format("Framerate {:.2f}FPS / Frametime {:.4f}ms", 1. / m_window->deltaTime(), m_window->deltaTime()));
 
 	auto mousePos = m_window->mousePosition();
 	if (mousePos.valid)
 	{
-		m_lblMousePosition.setText(std::format("Mouse Position: ({:.1f},{:.1f})", (double)m_window->mousePosition().x, (double)m_window->mousePosition().y));
+		//m_lblMousePosition.setText(std::format("Mouse Position: ({:.1f},{:.1f})", (double)m_window->mousePosition().x, (double)m_window->mousePosition().y));
 	}
 	else
 	{
