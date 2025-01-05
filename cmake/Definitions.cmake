@@ -49,6 +49,7 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 #						/wd4061					# switch not handled
 #						/wd4062					# switch not handled
 #						/wd4244					# possible loss of data
+#						/wd4371					# better packing of class member than previous version of the compiler
 #						/wd4505					# unreferenced function
 #						/wd4514					# unreferenced inline function has been removed
 #						/wd4599					# precompiled headers
@@ -56,6 +57,7 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 #						/wd4625					# copy constructor was implicitly defined as deleted
 #						/wd4626					# assignement operator was implicitly defined as deleted
 #						/wd4623					# default constructor was implicitly defined as deleted
+#						/wd4651					# Definition set for pch but not for current compile
 						/wd4710					# function not inlined
 						/wd4711					# function inlined
 #						/wd4715					# return value
@@ -69,158 +71,157 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 
 	)
 
-	set( CMAKE_SHARED_LINKER_FLAGS
-						/manifestuac:no
-#						/NOIMPLIB
-#						/NOEXP
-	)
+	set( CMAKE_SHARED_LINKER_FLAGS /manifestuac:no )
 endif()
 
 if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
 	set( CXX_COMPILE_FLAGS
-								-std=c++20
-								-no-pie
-								-fno-pie
-								-fPIC
-								-fdata-sections
-								-g1
-								-msse
-								-msse2
-								-msse3
-								-msse4.1
-								-pthread
-								-DNDEBUG
-								-O3
-								-fdiagnostics-color=always
-								-fdiagnostics-show-option
-								-ffunction-sections
-								-fomit-frame-pointer
-								-fsigned-char
-								-W
-								-Waddress
-								-Wall
-								-Walloca
-								-Wcast-align
-								-Wcast-qual
-								#-Wconversion
-								#						-Wctor-dtor-privacy
-								-Wdisabled-optimization
-								-Wdouble-promotion
-								-Werror
-								-Wextra
-								-Wformat
-								-Wformat-security
-								-Wformat=2
-								-Wimplicit-fallthrough=3
-								-Winit-self
-								-Wmissing-declarations
-								-Wmissing-field-initializers
-								#						-Wno-comment
-								#						-Wno-delete-non-virtual-dtor
-								#						-Wno-deprecated-copy
-								#						-Wno-dev
-								#						-Wno-long-long
-								#						-Wno-strict-overflow
-								#						-Wno-unused
-								#						-Wno-unused-parameter
-								#						-Wnon-virtual-dtor
-								#						-Wold-style-cast
-								-Woverloaded-virtual
-								-Wpedantic
-								-Wpointer-arith
-								-Wredundant-decls
-								-Wreorder
-								-Wreturn-type
-								-Wsequence-point
-								-Wshadow
-								#-Wsign-conversion
-								-Wsuggest-override
-								-Wswitch-default
-								-Wswitch-enum
-								-Wtautological-compare
-								-Wtype-limits
-								-Wundef
-								-Wuninitialized
-								-Wunknown-pragmas
-								-Wunreachable-code
-								-Wunused
-								-Wunused-but-set-variable
-								-Wunused-parameter
-								-Wunused-result
-								-Wunused-variable
-	)
+						-std=c++20
+						-no-pie
+						-fno-pie
+						-fPIC
+						-fdata-sections
+						-g1
+						-msse
+						-msse2
+						-msse3
+						-msse4.1
+						-pthread
+						-DNDEBUG
+						-O3
+						-fdiagnostics-color=always
+						-fdiagnostics-show-option
+						-ffunction-sections
+						-fomit-frame-pointer
+						-fsigned-char
+						-W
+						-Waddress
+						-Wall
+						-Walloca
+						-Wcast-align
+						-Wcast-qual
+						-Wconversion
+#						-Wctor-dtor-privacy
+						-Wdisabled-optimization
+						-Wdouble-promotion
+						-Werror
+						-Wextra
+						-Wformat
+						-Wformat-security
+						-Wformat=2
+						-Wimplicit-fallthrough=3
+						-Winit-self
+						-Wmissing-declarations
+						-Wmissing-field-initializers
+#						-Wno-comment
+#						-Wno-delete-non-virtual-dtor
+#						-Wno-deprecated-copy
+#						-Wno-dev
+#						-Wno-long-long
+#						-Wno-strict-overflow
+#						-Wno-unused
+#						-Wno-unused-parameter
+#						-Wnon-virtual-dtor
+#						-Wold-style-cast
+						-Woverloaded-virtual
+						-Wpedantic
+						-Wpointer-arith
+						-Wredundant-decls
+						-Wreorder
+						-Wreturn-type
+						-Wsequence-point
+						-Wshadow
+						-Wsign-conversion
+						-Wsuggest-override
+						-Wswitch-default
+						-Wswitch-enum
+						-Wtautological-compare
+						-Wtype-limits
+						-Wundef
+						-Wuninitialized
+						-Wunknown-pragmas
+						-Wunreachable-code
+						-Wunused
+						-Wunused-but-set-variable
+						-Wunused-parameter
+						-Wunused-result
+						-Wunused-variable
+						-Wno-invalid-pch
+	)	
 endif()
 
 if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
-		set( CXX_COMPILE_FLAGS
-								-std=c++20
-								-fno-pie
-								-fPIC
-								-fdata-sections
-								-g1
-								-msse
-								-msse2
-								-msse3
-								-msse4.1
-								-pthread
-								-DNDEBUG
-								-O3
-								-fdiagnostics-color=always
-								-fdiagnostics-show-option
-								-ffunction-sections
-								-fomit-frame-pointer
-								-fsigned-char
-								-W
-								-Waddress
-								-Wall
-								-Walloca
-								-Wcast-align
-								-Wcast-qual
-								#-Wconversion
-								#						-Wctor-dtor-privacy
-								-Wdisabled-optimization
-								-Wdouble-promotion
-								-Werror
-								-Wextra
-								-Wformat
-								-Wformat-security
-								-Wformat=2
-								#						-Wimplicit-fallthrough
-								-Winit-self
-								-Wmissing-declarations
-								-Wmissing-field-initializers
-								#						-Wno-comment
-								#						-Wno-delete-non-virtual-dtor
-								#						-Wno-deprecated-copy
-								#						-Wno-dev
-								#						-Wno-long-long
-								#						-Wno-strict-overflow
-								-Wno-unused
-								-Wno-unused-parameter
-								#						-Wnon-virtual-dtor
-								#						-Wold-style-cast
-								-Woverloaded-virtual
-								-Wpedantic
-								-Wpointer-arith
-								-Wredundant-decls
-								-Wreorder
-								-Wreturn-type
-								-Wsequence-point
-								-Wshadow
-								#-Wsign-conversion
-								-Wsuggest-override
-								-Wswitch-default
-								-Wswitch-enum
-								-Wtautological-compare
-								-Wtype-limits
-								-Wundef
-								-Wuninitialized
-								-Wunknown-pragmas
-								-Wunreachable-code
-								#						-Wunused
-								#						-Wunused-but-set-variable
-								#						-Wunused-parameter
-								#						-Wunused-result
-								#						-Wunused-variable
+	set( CXX_COMPILE_FLAGS
+						-std=c++20
+						-fno-pie
+						-fPIC
+						-fdata-sections
+						-g1
+						-msse
+						-msse2
+						-msse3
+						-msse4.1
+						-pthread
+						-DNDEBUG
+						-O3
+						-fdiagnostics-color=always
+						-fdiagnostics-show-option
+						-ffunction-sections
+						-fomit-frame-pointer
+						-fsigned-char
+						-W
+						-Waddress
+						-Wall
+						-Walloca
+						-Wcast-align
+						-Wcast-qual
+						-Wconversion
+#						-Wctor-dtor-privacy
+						-Wdisabled-optimization
+						-Wdouble-promotion
+						-Werror
+						-Wextra
+						-Wformat
+						-Wno-format-security
+#						-Wformat-security
+						-Wformat=2
+#						-Wimplicit-fallthrough
+						-Winit-self
+						-Wmissing-declarations
+						-Wmissing-field-initializers
+#						-Wno-comment
+#						-Wno-delete-non-virtual-dtor
+#						-Wno-deprecated-copy
+#						-Wno-dev
+#						-Wno-long-long
+#						-Wno-strict-overflow
+						-Wno-unused
+						-Wno-unused-parameter
+						-Wno-invalid-pch
+#						-Wnon-virtual-dtor
+#						-Wold-style-cast
+						-Woverloaded-virtual
+						-Wpedantic
+						-Wpointer-arith
+						-Wredundant-decls
+						-Wreorder
+						-Wreturn-type
+						-Wsequence-point
+						-Wshadow
+						-Wsign-conversion
+						-Wsuggest-override
+						-Wswitch-default
+						-Wswitch-enum
+						-Wtautological-compare
+						-Wtype-limits
+						-Wundef
+						-Wuninitialized
+						-Wunknown-pragmas
+						-Wunreachable-code
+#						-Wunused
+#						-Wunused-but-set-variable
+#						-Wunused-parameter
+#						-Wunused-result
+#						-Wunused-variable
 	)
 endif()

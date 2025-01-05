@@ -1,7 +1,6 @@
 #pragma once
 
-#include <nfx/GUI/GroupBox.h>
-
+#include <nfx/GUI/Panel.h>
 #include <nfx/GUI/VerticalLayout.h>
 #include <nfx/GUI/HorizontalLayout.h>
 #include <nfx/GUI/Combo.h>
@@ -9,59 +8,59 @@
 #include <nfx/GUI/Slider.h>
 #include <nfx/GUI/Label.h>
 
-#include "CameraViewport.h"
+#include <nfx/VideoCapture/VideoCaptureDevice.h>
 
-namespace nfx
-{
-	class VideoCaptureDevice;
-}
-
-class CameraController final : public nfx::GUI::GroupBox
+class CameraController final : public nfx::GUI::Panel
 {
 public:
-	CameraController(CameraViewport* p_cameraViewport);
-	CameraController() = delete;
+	CameraController();
 	CameraController(const CameraController&) = delete;
 	CameraController& operator=(const CameraController&) = delete;
 	CameraController(CameraController&&) = delete;
 	CameraController& operator=(CameraController&&) = delete;
 	virtual ~CameraController();
 
-	virtual void update() override;
-	virtual void draw() override;
-
 private:
-	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
-
 	nfx::GUI::VerticalLayout m_mainLayout;
 	nfx::GUI::HorizontalLayout m_hLayout;
 
-	nfx::GUI::Combo m_comboCameras;
-	nfx::GUI::Combo m_comboResolutions;
+	nfx::GUI::Combo* m_comboCameras;
+	nfx::GUI::Combo* m_comboResolutions;
 
-	nfx::GUI::CheckBox m_checkBoxCamera;
-	nfx::GUI::CheckBox m_checkBoxFlipH;
-	nfx::GUI::CheckBox m_checkBoxFlipV;
+	nfx::GUI::CheckBox* m_checkBoxCamera;
+	nfx::GUI::CheckBox* m_checkBoxFlipH;
+	nfx::GUI::CheckBox* m_checkBoxFlipV;
 
-	nfx::GUI::Slider m_brightnessSlider;
-	nfx::GUI::Slider m_contrastSlider;
-	nfx::GUI::Slider m_hueSlider;
-	nfx::GUI::Slider m_saturationSlider;
-	nfx::GUI::Slider m_sharpnessSlider;
-	nfx::GUI::Slider m_gammaSlider;
-	nfx::GUI::Slider m_whiteBalanceSlider;
-	nfx::GUI::Slider m_backLightCompensationSlider;
-	nfx::GUI::Slider m_gainSlider;
+	nfx::GUI::Slider* m_brightnessSlider;
+	nfx::GUI::Slider* m_contrastSlider;
+	nfx::GUI::Slider* m_hueSlider;
+	nfx::GUI::Slider* m_saturationSlider;
+	nfx::GUI::Slider* m_sharpnessSlider;
+	nfx::GUI::Slider* m_gammaSlider;
+	nfx::GUI::Slider* m_whiteBalanceSlider;
+	nfx::GUI::Slider* m_backLightCompensationSlider;
+	nfx::GUI::Slider* m_gainSlider;
 
-	nfx::GUI::Slider m_panSlider;
-	nfx::GUI::Slider m_tiltSlider;
-	nfx::GUI::Slider m_rollSlider;
-	nfx::GUI::Slider m_zoomSlider;
-	nfx::GUI::Slider m_exposureSlider;
-	nfx::GUI::Slider m_irisSlider;
-	nfx::GUI::Slider m_focusSlider;
+	nfx::GUI::Slider* m_panSlider;
+	nfx::GUI::Slider* m_tiltSlider;
+	nfx::GUI::Slider* m_rollSlider;
+	nfx::GUI::Slider* m_zoomSlider;
+	nfx::GUI::Slider* m_exposureSlider;
+	nfx::GUI::Slider* m_irisSlider;
+	nfx::GUI::Slider* m_focusSlider;
 
-	nfx::GUI::Label m_cameraFPS;
+	nfx::GUI::Label* m_lblCaptureBackend;
+	nfx::GUI::Label* m_lblCameraFPS;
+
+public:
+	void registerFrameReadyCallback(std::function<void(nfx::Graphics::Image)> p_frameReadyCallback);
+	void update();
+
+private:
+	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
+	std::vector<std::function<void(nfx::Graphics::Image)>> m_frameReadyCallbacks;
+
+	void onFrameReady(nfx::Graphics::Image fr);
 
 private:
 	// Callbacks
@@ -88,11 +87,8 @@ private:
 
 	void checkBoxFlipVClicked(bool);
 	void checkBoxFlipHClicked(bool);
-
-private:
 	void updateSettings();
 	void updateControls();
 
-private:
-	CameraViewport* m_cameraViewport;
+	void frameReadyCallback(nfx::Graphics::Image frame);
 };

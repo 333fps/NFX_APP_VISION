@@ -12,17 +12,20 @@ set( sources_files
 					"App/App.h"
 					"App/App.cpp"
 
-					"Gui/Gui.h"
-					"Gui/Gui.cpp"
+					"ui/Gui.h"
+					"ui/Gui.cpp"
 
-					"Gui/SimpleOverlay.h"
-					"Gui/SimpleOverlay.cpp"
+					"ui/MenuBar.h"
+					"ui/MenuBar.cpp"
 
-					"Gui/CameraController.h"
-					"Gui/CameraController.cpp"
+					"ui/StatusBar.h"
+					"ui/StatusBar.cpp"
 
-					"Gui/CameraViewport.h"
-					"Gui/CameraViewport.cpp"
+					"ui/CameraController.h"
+					"ui/CameraController.cpp"
+
+					"ui/CameraViewport.h"
+					"ui/CameraViewport.cpp"
 )
 
 add_executable( ${PROJECT_NAME}
@@ -30,11 +33,13 @@ add_executable( ${PROJECT_NAME}
 							${sources_files}
 )
 
+
+target_precompile_headers( ${PROJECT_NAME} REUSE_FROM nfxCore )
+
 target_include_directories( ${PROJECT_NAME} PRIVATE "." )
 
 target_compile_options( ${PROJECT_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${CXX_COMPILE_FLAGS}> )
 
-target_precompile_headers( ${PROJECT_NAME} REUSE_FROM nfxCore )
 
 if( UNIX )
 	set_target_properties( ${PROJECT_NAME} PROPERTIES
