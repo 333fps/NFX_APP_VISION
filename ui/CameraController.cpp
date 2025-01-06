@@ -147,7 +147,7 @@ CameraController::~CameraController()
 {
 }
 
-void CameraController::registerFrameReadyCallback(std::function<void(nfx::Graphics::Image)> p_frameReadyCallback)
+void CameraController::registerFrameReadyCallback(const std::function<void(nfx::Graphics::Image&)>& p_frameReadyCallback)
 {
 	m_frameReadyCallbacks.push_back(p_frameReadyCallback);
 }
@@ -157,14 +157,6 @@ void CameraController::update()
 	if (m_videoCaptureDevice)
 	{
 		m_lblCameraFPS->setText(std::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
-	}
-}
-
-void CameraController::onFrameReady(nfx::Graphics::Image fr)
-{
-	for (const auto& cb : m_frameReadyCallbacks)
-	{
-		cb(fr);
 	}
 }
 
@@ -204,7 +196,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 
 		m_videoCaptureDevice->registerFrameReadyCallback(
 			std::bind(
-				&CameraController::frameReadyCallback,
+				&CameraController::onFrameReady,
 				this,
 				std::placeholders::_1));
 
@@ -699,7 +691,7 @@ void CameraController::updateControls()
 	}
 }
 
-void CameraController::frameReadyCallback(nfx::Graphics::Image frame)
+void CameraController::onFrameReady(nfx::Graphics::Image& frame)
 {
 	// SPDLOG_WARN("{} {}", frame.width, frame.height);
 

@@ -53,14 +53,12 @@ private:
 	nfx::GUI::Label* m_lblCameraFPS;
 
 public:
-	void registerFrameReadyCallback(std::function<void(nfx::Graphics::Image)> p_frameReadyCallback);
+	void registerFrameReadyCallback(const std::function<void(nfx::Graphics::Image&)>& p_frameReadyCallback);
 	void update();
 
 private:
 	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
-	std::vector<std::function<void(nfx::Graphics::Image)>> m_frameReadyCallbacks;
-
-	void onFrameReady(nfx::Graphics::Image fr);
+	std::vector<std::function<void(nfx::Graphics::Image&)>> m_frameReadyCallbacks;
 
 private:
 	// Callbacks
@@ -90,5 +88,5 @@ private:
 	void updateSettings();
 	void updateControls();
 
-	void frameReadyCallback(nfx::Graphics::Image frame);
+	void onFrameReady(nfx::Graphics::Image& frame);
 };

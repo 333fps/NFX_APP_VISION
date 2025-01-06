@@ -79,10 +79,6 @@ void App::processEvents()
 
 bool App::init()
 {
-	std::thread::id this_id = std::this_thread::get_id();
-
-	std::cout << "thread0 " << this_id << " sleeping...\n";
-
 	nfx::Window::OpenGLHints::setVersion(nfx::Window::OpenGLHints::Version::OpengGL_4_5_core);
 	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name.c_str());
 	if (!m_window->isValid())

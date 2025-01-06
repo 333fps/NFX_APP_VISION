@@ -15,7 +15,7 @@ public:
 	CameraViewport& operator=(CameraViewport&&) = delete;
 	virtual ~CameraViewport();
 
-	void setImage(nfx::Graphics::Image);
+	void setImage(nfx::Graphics::Image&);
 
 private:
 	nfx::GUI::VerticalLayout m_mainLayout;

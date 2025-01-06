@@ -16,7 +16,7 @@ CameraViewport::~CameraViewport()
 	delete m_image;
 }
 
-void CameraViewport::setImage(nfx::Graphics::Image img)
+void CameraViewport::setImage(nfx::Graphics::Image& img)
 {
 	// SPDLOG_ERROR("{} {}", img.width, img.height);
 
