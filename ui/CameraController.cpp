@@ -56,7 +56,7 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_lblCameraFPS = new nfx::GUI::Label{ "Camera fps: " };
 			m_lblCameraFPS->setEnable(false);
 
-			 m_mainLayout.addWidget(m_brightnessSlider);
+			m_mainLayout.addWidget(m_brightnessSlider);
 			m_mainLayout.addWidget(m_contrastSlider);
 			m_mainLayout.addWidget(m_hueSlider);
 			m_mainLayout.addWidget(m_saturationSlider);
