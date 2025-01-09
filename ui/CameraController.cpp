@@ -167,7 +167,7 @@ void CameraController::cameraIndexChanged(unsigned idx)
 	for (const auto& res : data)
 	{
 		std::stringstream ss;
-		ss << res.x << "x" << res.y << "/" << res.bitcount << "bpp @" << res.fps << "fps ";
+		ss << res.fourcc << " " << res.x << "x" << res.y << "/" << res.bitcount << "bpp @" << res.fps << "fps ";
 
 		m_comboResolutions->addItem(ss.str());
 	}
