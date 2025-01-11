@@ -184,7 +184,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		const auto& data = std::any_cast<const std::vector<nfx::VideoFormat>&>(m_comboCameras->currentData());
 		const auto& fmt = data.at(m_comboResolutions->currentIndex());
 
-		m_videoCaptureDevice->open(fmt.fourcc, fmt.x, fmt.y, fmt.fps);
+		m_videoCaptureDevice->open(fmt.fourcc, fmt.x, fmt.y);
 
 		if (!m_videoCaptureDevice->isOpen())
 		{
