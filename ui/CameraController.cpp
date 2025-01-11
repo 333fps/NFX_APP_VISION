@@ -108,7 +108,7 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 		{
 			m_comboCameras->addItem(device.name());
 
-			m_comboCameras->setData(i, device.resolutions());
+			m_comboCameras->setData(i, device.formats());
 
 			++i;
 		}
@@ -156,7 +156,6 @@ void CameraController::update()
 	if (m_videoCaptureDevice)
 	{
 		m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
-		// m_lblCameraFPS->setText(std::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
 	}
 }
 
@@ -164,11 +163,11 @@ void CameraController::cameraIndexChanged(unsigned idx)
 {
 	m_comboResolutions->clear();
 
-	const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_comboCameras->data(idx));
-	for (const auto& res : data)
+	const auto& data = std::any_cast<const std::vector<nfx::VideoFormat>&>(m_comboCameras->data(idx));
+	for (const auto& fmt : data)
 	{
 		std::stringstream ss;
-		ss << res.fourcc << " " << res.x << "x" << res.y << "/" << res.bitcount << "bpp @" << res.fps << "fps ";
+		ss << fmt.fourcc << " " << fmt.x << "x" << fmt.y << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
 
 		m_comboResolutions->addItem(ss.str());
 	}
@@ -182,10 +181,10 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	{
 		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_comboCameras->currentIndex() });
 
-		const auto& data = std::any_cast<const std::vector<nfx::VideoResolution>&>(m_comboCameras->currentData());
-		const auto& resolution = data.at(m_comboResolutions->currentIndex());
+		const auto& data = std::any_cast<const std::vector<nfx::VideoFormat>&>(m_comboCameras->currentData());
+		const auto& fmt = data.at(m_comboResolutions->currentIndex());
 
-		m_videoCaptureDevice->open(resolution.x, resolution.y, resolution.fps);
+		m_videoCaptureDevice->open(fmt.fourcc, fmt.x, fmt.y, fmt.fps);
 
 		if (!m_videoCaptureDevice->isOpen())
 		{
@@ -215,8 +214,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 			m_videoCaptureDevice->flipVertically(true);
 		}
 
-		//updateSettings();
-		//updateControls();
+		updateSettings();
+		updateControls();
 
 		{ // TODO
 			m_videoCaptureDevice->setAutoExposure(true);
