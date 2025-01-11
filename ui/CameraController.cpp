@@ -155,7 +155,8 @@ void CameraController::update()
 {
 	if (m_videoCaptureDevice)
 	{
-		m_lblCameraFPS->setText(std::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
+		m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
+		// m_lblCameraFPS->setText(std::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
 	}
 }
 
@@ -200,7 +201,6 @@ void CameraController::cameraCheckBoxClicked(bool b)
 				std::placeholders::_1));
 
 		SPDLOG_INFO("Capture device \"{}\" opened successfully.", m_comboCameras->currentText());
-
 		{
 			m_comboCameras->setEnable(false);
 			m_comboResolutions->setEnable(false);
@@ -215,8 +215,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 			m_videoCaptureDevice->flipVertically(true);
 		}
 
-		updateSettings();
-		updateControls();
+		//updateSettings();
+		//updateControls();
 
 		{ // TODO
 			m_videoCaptureDevice->setAutoExposure(true);

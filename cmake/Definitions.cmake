@@ -223,5 +223,6 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
 #						-Wunused-parameter
 #						-Wunused-result
 #						-Wunused-variable
+						-Wno-unreachable-code
 	)
 endif()
