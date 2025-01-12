@@ -222,8 +222,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		updateControls();
 
 		{ // TODO
-			m_videoCaptureDevice->setAutoExposure(true);
-			m_videoCaptureDevice->setAutoWhiteBalance(true);
+			m_videoCaptureDevice->setAutoExposure(false);
+			m_videoCaptureDevice->setAutoWhiteBalance(false);
 		}
 	}
 	else
