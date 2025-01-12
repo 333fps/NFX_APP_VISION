@@ -57,6 +57,7 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_lblCameraVendor->setEnable(false);
 
 			m_lblCameraFPS = new nfx::GUI::Label{ "Camera fps: " };
+			m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", 0.f));
 			m_lblCameraFPS->setEnable(false);
 
 			m_mainLayout.addWidget(m_brightnessSlider);
@@ -243,6 +244,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 			if (!m_videoCaptureDevice->isOpen())
 			{
 				SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras->currentText());
+
+				m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", 0.f));
 
 				m_comboCameras->setEnable(true);
 				m_comboResolutions->setEnable(true);
