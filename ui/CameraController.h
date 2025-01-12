@@ -51,6 +51,7 @@ private:
 
 	nfx::GUI::Label* m_lblCaptureBackend;
 	nfx::GUI::Label* m_lblCameraFPS;
+	nfx::GUI::Label* m_lblCameraVendor;
 
 public:
 	void registerFrameReadyCallback(const std::function<void(nfx::Graphics::Image&)>& p_frameReadyCallback);

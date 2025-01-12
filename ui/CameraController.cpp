@@ -53,6 +53,9 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_lblCaptureBackend = new nfx::GUI::Label{ "Capture backend: " + nfx::backendName() };
 			m_lblCaptureBackend->setEnable(false);
 
+			m_lblCameraVendor = new nfx::GUI::Label{ "Camera vendor: " };
+			m_lblCameraVendor->setEnable(false);
+
 			m_lblCameraFPS = new nfx::GUI::Label{ "Camera fps: " };
 			m_lblCameraFPS->setEnable(false);
 
@@ -75,6 +78,7 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_mainLayout.addWidget(m_focusSlider);
 
 			m_mainLayout.addWidget(m_lblCaptureBackend);
+			m_mainLayout.addWidget(m_lblCameraVendor);
 			m_mainLayout.addWidget(m_lblCameraFPS);
 
 			m_brightnessSlider->setEnable(false);
@@ -108,7 +112,7 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 		{
 			m_comboCameras->addItem(device.name());
 
-			m_comboCameras->setData(i, device.formats());
+			m_comboCameras->setData(i, std::pair(device.vendor(), device.formats()));
 
 			++i;
 
@@ -168,15 +172,18 @@ void CameraController::cameraIndexChanged(unsigned idx)
 {
 	m_comboResolutions->clear();
 
-	const auto& data = std::any_cast<const std::vector<nfx::VideoFormat>&>(m_comboCameras->data(idx));
-	for (const auto& fmt : data)
+	const auto& data = std::any_cast<std::pair<std::string, std::vector<nfx::VideoFormat>>>(m_comboCameras->data(idx));
+	const auto& vendor = data.first;
+	const auto& formats = data.second;
+
+	for (const auto& fmt : formats)
 	{
 		std::stringstream ss;
 		ss << fmt.fourcc << " " << fmt.width << "x" << fmt.height << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
-
 		m_comboResolutions->addItem(ss.str());
 	}
 
+	m_lblCameraVendor->setText("Camera vendor: " + vendor);
 	m_comboResolutions->setCurrentIndex(m_comboResolutions->count() - 1);
 }
 
@@ -186,8 +193,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	{
 		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_comboCameras->currentIndex() });
 
-		const auto& data = std::any_cast<const std::vector<nfx::VideoFormat>&>(m_comboCameras->currentData());
-		const auto& fmt = data.at(m_comboResolutions->currentIndex());
+		const auto& data = std::any_cast<std::pair<std::string, std::vector<nfx::VideoFormat>>>(m_comboCameras->currentData());
+		const auto& fmt = data.second.at(m_comboResolutions->currentIndex());
 
 		m_videoCaptureDevice->open(fmt.fourcc, fmt.width, fmt.height);
 
