@@ -2,7 +2,7 @@
 
 #include <nfx/VideoCapture/VideoCaptureDeviceInfo.h>
 #include <nfx/VideoCapture/VideoCaptureDevice.h>
-#include <nfx/VideoCapture/VideoResolution.h>
+#include <nfx/VideoCapture/VideoFormat.h>
 #include <nfx/VideoCapture/Enums.h>
 #include <nfx/VideoCapture/BackEndInfo.h>
 
@@ -47,7 +47,7 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_rollSlider = new nfx::GUI::Slider{ "Roll" };
 			m_zoomSlider = new nfx::GUI::Slider{ "Zoom" };
 			m_exposureSlider = new nfx::GUI::Slider{ "Exposure" };
-			m_irisSlider = new nfx::GUI::Slider{ "Brightness" };
+			m_irisSlider = new nfx::GUI::Slider{ "Iris" };
 			m_focusSlider = new nfx::GUI::Slider{ "Focus" };
 
 			m_lblCaptureBackend = new nfx::GUI::Label{ "Capture backend: " + nfx::backendName() };
@@ -111,6 +111,11 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_comboCameras->setData(i, device.formats());
 
 			++i;
+
+			SPDLOG_WARN("idx: {}", device.idx());
+			SPDLOG_WARN("idx: {}", device.name());
+			SPDLOG_WARN("idx: {}", device.vendor());
+			SPDLOG_WARN("idx: {}", device.path());
 		}
 	}
 
@@ -167,7 +172,7 @@ void CameraController::cameraIndexChanged(unsigned idx)
 	for (const auto& fmt : data)
 	{
 		std::stringstream ss;
-		ss << fmt.fourcc << " " << fmt.x << "x" << fmt.y << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
+		ss << fmt.fourcc << " " << fmt.width << "x" << fmt.height << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
 
 		m_comboResolutions->addItem(ss.str());
 	}
@@ -184,12 +189,11 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		const auto& data = std::any_cast<const std::vector<nfx::VideoFormat>&>(m_comboCameras->currentData());
 		const auto& fmt = data.at(m_comboResolutions->currentIndex());
 
-		m_videoCaptureDevice->open(fmt.fourcc, fmt.x, fmt.y);
+		m_videoCaptureDevice->open(fmt.fourcc, fmt.width, fmt.height);
 
 		if (!m_videoCaptureDevice->isOpen())
 		{
 			SPDLOG_ERROR("Failed to open Capture device \"{}\".", m_comboCameras->currentText());
-
 			return;
 		}
 
@@ -219,79 +223,92 @@ void CameraController::cameraCheckBoxClicked(bool b)
 
 		{ // TODO
 			m_videoCaptureDevice->setAutoExposure(true);
+			m_videoCaptureDevice->setAutoWhiteBalance(true);
 		}
 	}
 	else
 	{
-		m_videoCaptureDevice->close();
-
-		if (!m_videoCaptureDevice->isOpen())
+		if (m_videoCaptureDevice && m_videoCaptureDevice->isOpen())
 		{
-			SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras->currentText());
+			SPDLOG_INFO("Closing capture device \"{}\".", m_comboCameras->currentText());
+			m_videoCaptureDevice->close();
 
-			m_comboCameras->setEnable(true);
-			m_comboResolutions->setEnable(true);
-
+			if (!m_videoCaptureDevice->isOpen())
 			{
-				m_brightnessSlider->setValue(0);
-				m_contrastSlider->setValue(0);
-				m_hueSlider->setValue(0);
-				m_saturationSlider->setValue(0);
-				m_sharpnessSlider->setValue(0);
-				m_gammaSlider->setValue(0);
-				m_whiteBalanceSlider->setValue(0);
-				m_backLightCompensationSlider->setValue(0);
-				m_gainSlider->setValue(0);
+				SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras->currentText());
 
-				m_brightnessSlider->setRange(0, 0, 0, 0);
-				m_contrastSlider->setRange(0, 0, 0, 0);
-				m_hueSlider->setRange(0, 0, 0, 0);
-				m_saturationSlider->setRange(0, 0, 0, 0);
-				m_sharpnessSlider->setRange(0, 0, 0, 0);
-				m_gammaSlider->setRange(0, 0, 0, 0);
-				m_whiteBalanceSlider->setRange(0, 0, 0, 0);
-				m_backLightCompensationSlider->setRange(0, 0, 0, 0);
-				m_gainSlider->setRange(0, 0, 0, 0);
+				m_comboCameras->setEnable(true);
+				m_comboResolutions->setEnable(true);
 
-				m_brightnessSlider->setEnable(false);
-				m_contrastSlider->setEnable(false);
-				m_hueSlider->setEnable(false);
-				m_saturationSlider->setEnable(false);
-				m_sharpnessSlider->setEnable(false);
-				m_gammaSlider->setEnable(false);
-				m_whiteBalanceSlider->setEnable(false);
-				m_backLightCompensationSlider->setEnable(false);
-				m_gainSlider->setEnable(false);
+				{
+					m_brightnessSlider->setValue(0);
+					m_contrastSlider->setValue(0);
+					m_hueSlider->setValue(0);
+					m_saturationSlider->setValue(0);
+					m_sharpnessSlider->setValue(0);
+					m_gammaSlider->setValue(0);
+					m_whiteBalanceSlider->setValue(0);
+					m_backLightCompensationSlider->setValue(0);
+					m_gainSlider->setValue(0);
+
+					m_brightnessSlider->setRange(0, 0, 0, 0);
+					m_contrastSlider->setRange(0, 0, 0, 0);
+					m_hueSlider->setRange(0, 0, 0, 0);
+					m_saturationSlider->setRange(0, 0, 0, 0);
+					m_sharpnessSlider->setRange(0, 0, 0, 0);
+					m_gammaSlider->setRange(0, 0, 0, 0);
+					m_whiteBalanceSlider->setRange(0, 0, 0, 0);
+					m_backLightCompensationSlider->setRange(0, 0, 0, 0);
+					m_gainSlider->setRange(0, 0, 0, 0);
+
+					m_brightnessSlider->setEnable(false);
+					m_contrastSlider->setEnable(false);
+					m_hueSlider->setEnable(false);
+					m_saturationSlider->setEnable(false);
+					m_sharpnessSlider->setEnable(false);
+					m_gammaSlider->setEnable(false);
+					m_whiteBalanceSlider->setEnable(false);
+					m_backLightCompensationSlider->setEnable(false);
+					m_gainSlider->setEnable(false);
+				}
+
+				{
+					m_panSlider->setValue(0);
+					m_tiltSlider->setValue(0);
+					m_rollSlider->setValue(0);
+					m_zoomSlider->setValue(0);
+					m_exposureSlider->setValue(0);
+					m_irisSlider->setValue(0);
+					m_focusSlider->setValue(0);
+
+					m_panSlider->setRange(0, 0, 0, 0);
+					m_tiltSlider->setRange(0, 0, 0, 0);
+					m_rollSlider->setRange(0, 0, 0, 0);
+					m_zoomSlider->setRange(0, 0, 0, 0);
+					m_exposureSlider->setRange(0, 0, 0, 0);
+					m_irisSlider->setRange(0, 0, 0, 0);
+					m_focusSlider->setRange(0, 0, 0, 0);
+
+					m_panSlider->setEnable(false);
+					m_tiltSlider->setEnable(false);
+					m_rollSlider->setEnable(false);
+					m_zoomSlider->setEnable(false);
+					m_exposureSlider->setEnable(false);
+					m_irisSlider->setEnable(false);
+					m_focusSlider->setEnable(false);
+				}
+			}
+			else
+			{
+				SPDLOG_ERROR("Failed to close Capture device \"{}\".", m_comboCameras->currentText());
 			}
 
-			{
-				m_panSlider->setValue(0);
-				m_tiltSlider->setValue(0);
-				m_rollSlider->setValue(0);
-				m_zoomSlider->setValue(0);
-				m_exposureSlider->setValue(0);
-				m_irisSlider->setValue(0);
-				m_focusSlider->setValue(0);
-
-				m_panSlider->setRange(0, 0, 0, 0);
-				m_tiltSlider->setRange(0, 0, 0, 0);
-				m_rollSlider->setRange(0, 0, 0, 0);
-				m_zoomSlider->setRange(0, 0, 0, 0);
-				m_exposureSlider->setRange(0, 0, 0, 0);
-				m_irisSlider->setRange(0, 0, 0, 0);
-				m_focusSlider->setRange(0, 0, 0, 0);
-
-				m_panSlider->setEnable(false);
-				m_tiltSlider->setEnable(false);
-				m_rollSlider->setEnable(false);
-				m_zoomSlider->setEnable(false);
-				m_exposureSlider->setEnable(false);
-				m_irisSlider->setEnable(false);
-				m_focusSlider->setEnable(false);
-			}
+			m_videoCaptureDevice.release();
 		}
-
-		m_videoCaptureDevice.release();
+		else
+		{
+			SPDLOG_WARN("Capture device is not open or already closed.");
+		}
 	}
 }
 
