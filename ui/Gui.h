@@ -12,6 +12,8 @@ namespace nfx
 	namespace Window
 	{
 		class Window;
+		class Context;
+
 		namespace Inputs
 		{
 			struct KeyState;
@@ -22,7 +24,7 @@ namespace nfx
 class GUI : public nfx::GUI::MainWidget
 {
 public:
-	explicit GUI(nfx::Window::Window* p_window);
+	explicit GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context);
 	GUI() = delete;
 	GUI(const GUI&) = delete;
 	GUI& operator=(const GUI&) = delete;

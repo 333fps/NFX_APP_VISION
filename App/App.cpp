@@ -122,7 +122,7 @@ bool App::init()
 		nfx::Graphics::GL::Debugger::setSeverityLevel(nfx::Graphics::GL::DebuggerSeverity::Notification);
 	}
 
-	m_gui = std::make_unique<GUI>(m_window.get());
+	m_gui = std::make_unique<GUI>(m_window.get(), m_context.get());
 
 	return true;
 }

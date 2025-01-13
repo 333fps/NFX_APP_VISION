@@ -1,13 +1,15 @@
 #include "Gui.h"
 
 #include <nfx/Window/Window.h>
+#include <nfx/Window/Context.h>
 #include "nfx/Window/Inputs.h"
 #include <nfx/GUI/DockSpace.h>
 
 #include <spdlog/spdlog.h>
 
-GUI::GUI(nfx::Window::Window* p_window) : nfx::GUI::MainWidget{ p_window },
-										  m_window{ p_window }
+GUI::GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context)
+	: nfx::GUI::MainWidget{ p_window, p_context },
+	  m_window{ p_window }
 {
 	{
 		m_menuBar = new MenuBar{ p_window };
