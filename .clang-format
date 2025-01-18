@@ -1,6 +1,7 @@
 AccessModifierOffset: -4
 AlignAfterOpenBracket: DontAlign
 #AllowShortBlocksOnASingleLine: true
+AllowShortLambdasOnASingleLine : SLS_All;
 AllowShortFunctionsOnASingleLine: All
 BasedOnStyle: Microsoft
 BraceWrapping:
@@ -16,6 +17,7 @@ BraceWrapping:
   IndentBraces: false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
+  BeforeLambdaBody : true
 BreakBeforeBraces: Custom
 ColumnLimit: 0
 Cpp11BracedListStyle: false
