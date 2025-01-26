@@ -1,8 +1,9 @@
 #include "App.h"
 
-#include <nfx/Window/Window.h>
-#include <nfx/Window/Context.h>
-#include <nfx/Window/OpenGLHints.h>
+#include <nfx/Window2/Api.h>
+#include <nfx/Window2/Window.h>
+#include <nfx/Window2/Context.h>
+// #include <nfx/Window/OpenGLHints.h>
 #include <nfx/Graphics/GL/Enums.h>
 #include <nfx/Graphics/GL/Scene/Renderer.h>
 #include <nfx/Graphics/GL/Utils/Debugger.h>
@@ -38,16 +39,16 @@ int App::run(int argc, char* argv[])
 
 	while (!m_window->shouldClose())
 	{
-		processEvents();
-
 		update();
 
 		render();
+
+		processEvents();
 	}
 
 	m_gui->teardown();
 
-	m_context->tearDown();
+	// m_context->tearDown();
 
 	return EXIT_SUCCESS;
 }
@@ -60,7 +61,7 @@ void App::update()
 
 void App::render()
 {
-	m_context->beginFrame(m_window.get());
+	m_context->beginFrame();
 
 	{
 		m_renderer->begin();
@@ -69,7 +70,7 @@ void App::render()
 		m_gui->drawGUI();
 	}
 
-	m_context->endFrame(m_window.get());
+	m_context->endFrame();
 }
 
 void App::processEvents()
@@ -79,28 +80,17 @@ void App::processEvents()
 
 bool App::init()
 {
-	nfx::Window::OpenGLHints::setVersion(nfx::Window::OpenGLHints::Version::OpengGL_4_5_core);
-	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name.c_str());
-	if (!m_window->isValid())
-	{
-		SPDLOG_ERROR("Failed to create window.");
-		return false;
-	}
+	m_window = std::make_unique<nfx::Window2::Window>(nfx::Window2::Api::OpenGL, m_width, m_height, m_name);
 
-	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL, m_window.get());
-	if (!m_context->isValid())
-	{
-		SPDLOG_ERROR("Failed to create OpenGL context.");
-		return false;
-	}
+	m_context = std::make_unique<nfx::Window2::Context>(nfx::Window2::Api::OpenGL);
 
-	m_context->beginFrame(m_window.get());
+	m_context->beginFrame();
 
 	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>();
 
 	{
-		m_window->enableVSync(true);
-		m_window->enableNativeCursor(false);
+		// m_context->enableVSync(true);
+		//  m_window->enableNativeCursor(false);
 		m_window->show();
 	}
 

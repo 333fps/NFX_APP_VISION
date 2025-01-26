@@ -9,22 +9,22 @@
 
 namespace nfx
 {
-	namespace Window
+	namespace Window2
 	{
 		class Window;
 		class Context;
 
-		namespace Inputs
-		{
-			struct KeyState;
-		}
+		// namespace Inputs
+		//{
+		//	struct KeyState;
+		// }
 	}
 }
 
 class GUI : public nfx::GUI::MainWidget
 {
 public:
-	explicit GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context);
+	explicit GUI(nfx::Window2::Window* p_window, nfx::Window2::Context* p_context);
 	GUI() = delete;
 	GUI(const GUI&) = delete;
 	GUI& operator=(const GUI&) = delete;
@@ -35,7 +35,7 @@ public:
 	void update();
 
 private:
-	nfx::Window::Window* m_window;
+	nfx::Window2::Window* m_window;
 
 private:
 	MenuBar* m_menuBar;
@@ -48,5 +48,5 @@ private:
 
 private:
 	void updateCallback();
-	void keyCallback(nfx::Window::Inputs::KeyState p_keyState);
+	// void keyCallback(nfx::Window::Inputs::KeyState p_keyState);
 };

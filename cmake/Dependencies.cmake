@@ -14,11 +14,17 @@ message(STATUS "nfxLibs definitions: ${nfxLIBS_COMPILE_DEFINITIONS}")
   find_package(imgui CONFIG REQUIRED)
   target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
 
+	  find_package(magic_enum CONFIG REQUIRED)
+	target_link_libraries(${PROJECT_NAME} PRIVATE magic_enum::magic_enum)
+
+		find_package(GLEW REQUIRED)
+	target_link_libraries(${PROJECT_NAME} PRIVATE GLEW::GLEW)
+
 target_link_libraries( ${PROJECT_NAME} PUBLIC
 											nfxApplication
 											nfxGraphicsCore
 											nfxGraphicsGL
-											nfxWindow
+											nfxWindow2
 											nfxGUI
 											nfxVideoCapture
 )
