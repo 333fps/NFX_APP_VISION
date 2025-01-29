@@ -80,7 +80,9 @@ void App::processEvents()
 
 bool App::init()
 {
-	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name);
+	nfx::Window::Window::Config config{ .decoration = nfx::Window::Window::Decoration::Standard };
+
+	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name, &config);
 
 	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL);
 
