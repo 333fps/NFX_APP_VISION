@@ -24,7 +24,7 @@ target_link_libraries( ${PROJECT_NAME} PUBLIC
 											nfxApplication
 											nfxGraphicsCore
 											nfxGraphicsGL
-											nfxWindow2
+											nfxWindow
 											nfxGUI
 											nfxVideoCapture
 )

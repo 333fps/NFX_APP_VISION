@@ -1,13 +1,13 @@
 #include "Gui.h"
 
-#include <nfx/Window2/Window.h>
-#include <nfx/Window2/Context.h>
-#include "nfx/Window2/Inputs.h"
+#include <nfx/Window/Window.h>
+#include <nfx/Window/Context.h>
+#include "nfx/Window/Inputs.h"
 #include <nfx/GUI/DockSpace.h>
 
 #include <spdlog/spdlog.h>
 
-GUI::GUI(nfx::Window2::Window* p_window, nfx::Window2::Context* p_context)
+GUI::GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context)
 	: nfx::GUI::MainWidget{ p_window, p_context },
 	  m_window{ p_window }
 {

@@ -2,8 +2,8 @@
 
 #include <spdlog/spdlog.h>
 
-MenuBar::MenuBar(nfx::Window2::Window* p_window) : nfx::GUI::MenuBar{},
-												   m_window{ p_window }
+MenuBar::MenuBar(nfx::Window::Window* p_window) : nfx::GUI::MenuBar{},
+												  m_window{ p_window }
 {
 	m_fileMenu = new nfx::GUI::Menu{ "File", true };
 

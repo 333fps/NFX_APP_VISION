@@ -9,7 +9,7 @@
 
 namespace nfx
 {
-	namespace Window2
+	namespace Window
 	{
 		class Window;
 		class Context;
@@ -24,7 +24,7 @@ namespace nfx
 class GUI : public nfx::GUI::MainWidget
 {
 public:
-	explicit GUI(nfx::Window2::Window* p_window, nfx::Window2::Context* p_context);
+	explicit GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context);
 	GUI() = delete;
 	GUI(const GUI&) = delete;
 	GUI& operator=(const GUI&) = delete;
@@ -35,7 +35,7 @@ public:
 	void update();
 
 private:
-	nfx::Window2::Window* m_window;
+	nfx::Window::Window* m_window;
 
 private:
 	MenuBar* m_menuBar;

@@ -1,8 +1,8 @@
 #include "App.h"
 
-#include <nfx/Window2/Api.h>
-#include <nfx/Window2/Window.h>
-#include <nfx/Window2/Context.h>
+#include <nfx/Window/Api.h>
+#include <nfx/Window/Window.h>
+#include <nfx/Window/Context.h>
 // #include <nfx/Window/OpenGLHints.h>
 #include <nfx/Graphics/GL/Enums.h>
 #include <nfx/Graphics/GL/Scene/Renderer.h>
@@ -80,9 +80,9 @@ void App::processEvents()
 
 bool App::init()
 {
-	m_window = std::make_unique<nfx::Window2::Window>(nfx::Window2::Api::OpenGL, m_width, m_height, m_name);
+	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name);
 
-	m_context = std::make_unique<nfx::Window2::Context>(nfx::Window2::Api::OpenGL);
+	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL);
 
 	m_context->beginFrame();
 
