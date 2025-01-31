@@ -50,6 +50,12 @@ GUI::~GUI()
 void GUI::update()
 {
 	m_cameraController->update();
+
+	m_statusBar.setFrameRate(2.f);
+
+	// auto a = frameRate();
+
+	// SPDLOG_INFO(a);
 }
 
 void GUI::updateCallback()
@@ -58,10 +64,11 @@ void GUI::updateCallback()
 	m_statusBar.setFrameTime(deltaTime());
 }
 
-// void GUI::keyCallback(nfx::Window::Inputs::KeyState p_keyState)
-//{
-//	if (p_keyState.key == nfx::Window::Inputs::Key::KeyF8 && p_keyState.state == nfx::Window::Inputs::State::Up)
-//	{
-//		m_window->toggleFullSCreen();
-//	}
-// }
+void GUI::keyCallback(nfx::Window::Inputs::KeyState p_keyState)
+{
+	if (p_keyState.key == nfx::Window::Inputs::Key::KeyF8 && p_keyState.state == nfx::Window::Inputs::State::Up)
+	{
+		SPDLOG_INFO("F8 key pressed.");
+		m_window->toggleFullscreen();
+	}
+}

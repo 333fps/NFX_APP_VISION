@@ -14,10 +14,10 @@ namespace nfx
 		class Window;
 		class Context;
 
-		// namespace Inputs
-		//{
-		//	struct KeyState;
-		// }
+		 namespace Inputs
+		{
+			struct KeyState;
+		 }
 	}
 }
 
@@ -48,5 +48,5 @@ private:
 
 private:
 	void updateCallback();
-	// void keyCallback(nfx::Window::Inputs::KeyState p_keyState);
+	 void keyCallback(nfx::Window::Inputs::KeyState p_keyState);
 };
