@@ -55,7 +55,6 @@ private:
 
 public:
 	void registerFrameReadyCallback(const std::function<void(nfx::Graphics::Image&)>& p_frameReadyCallback);
-	void update();
 
 private:
 	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;

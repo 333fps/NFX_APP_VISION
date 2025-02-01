@@ -31,10 +31,10 @@ StatusBar::~StatusBar()
 
 void StatusBar::setFrameRate(float p_frameRate)
 {
-	m_lblFramerate->setText(fmt::format("Framerate: {:.2f} FPS", p_frameRate));
+	m_lblFramerate->setText(fmt::format("Framerate: {:.0f}fps", p_frameRate));
 }
 
 void StatusBar::setFrameTime(float p_frameRate)
 {
-	m_lblFrameTime->setText(fmt::format("Frametime: {:.4f} ms", p_frameRate));
+	m_lblFrameTime->setText(fmt::format("Frametime: {:.4f}ms", p_frameRate));
 }

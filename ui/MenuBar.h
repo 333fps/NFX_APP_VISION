@@ -19,7 +19,6 @@ private:
 	nfx::Window::Window* m_window;
 
 	nfx::GUI::Menu* m_fileMenu;
-	nfx::GUI::MenuItem* m_menuItem;
 	nfx::GUI::MenuItem* m_menuItemQuit;
 	nfx::GUI::MenuItem* m_menuItemFullscreen;
 

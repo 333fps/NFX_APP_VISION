@@ -156,14 +156,6 @@ void CameraController::registerFrameReadyCallback(const std::function<void(nfx::
 	m_frameReadyCallbacks.push_back(p_frameReadyCallback);
 }
 
-void CameraController::update()
-{
-	if (m_videoCaptureDevice)
-	{
-		m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
-	}
-}
-
 void CameraController::cameraIndexChanged(unsigned idx)
 {
 	m_comboResolutions->clear();
@@ -713,7 +705,10 @@ void CameraController::updateControls()
 
 void CameraController::onFrameReady(nfx::Graphics::Image& frame)
 {
-	// SPDLOG_WARN("{} {}", frame.width, frame.height);
+	if (m_videoCaptureDevice)
+	{
+		m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
+	}
 
 	for (const auto& cb : m_frameReadyCallbacks)
 	{

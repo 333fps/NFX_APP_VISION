@@ -7,12 +7,9 @@ MenuBar::MenuBar(nfx::Window::Window* p_window) : nfx::GUI::MenuBar{},
 {
 	m_fileMenu = new nfx::GUI::Menu{ "File", true };
 
-	m_menuItem = new nfx::GUI::MenuItem{ "item1", "shortcut1", true };
-	m_menuItemQuit = new nfx::GUI::MenuItem{ "Quit", "Ctrl+Q", true };
+	m_menuItemQuit = new nfx::GUI::MenuItem{ "Quit", "Alt+F4", true };
 	m_menuItemFullscreen = new nfx::GUI::MenuItem{ "Fullscreen", "F8", true };
 
-	m_fileMenu->addMenuItem(m_menuItem);
-	m_fileMenu->addSeparator();
 	m_fileMenu->addMenuItem(m_menuItemFullscreen);
 	m_fileMenu->addSeparator();
 	m_fileMenu->addMenuItem(m_menuItemQuit);
