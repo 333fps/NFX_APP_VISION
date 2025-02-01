@@ -25,7 +25,7 @@ private:
 	nfx::GUI::HorizontalLayout m_hLayout;
 
 	nfx::GUI::Combo* m_comboCameras;
-	nfx::GUI::Combo* m_comboResolutions;
+	nfx::GUI::Combo* m_comboFormats;
 
 	nfx::GUI::CheckBox* m_checkBoxCamera;
 	nfx::GUI::CheckBox* m_checkBoxFlipH;

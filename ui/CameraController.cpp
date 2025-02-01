@@ -16,12 +16,12 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 		m_checkBoxFlipV = new nfx::GUI::CheckBox{ "Flip vertically" };
 
 		m_comboCameras = new nfx::GUI::Combo{ "Cameras" };
-		m_comboResolutions = new nfx::GUI::Combo{ "res" };
+		m_comboFormats = new nfx::GUI::Combo{ "Formats" };
 	}
 
 	{
 		m_mainLayout.addWidget(m_comboCameras);
-		m_mainLayout.addWidget(m_comboResolutions);
+		m_mainLayout.addWidget(m_comboFormats);
 
 		m_mainLayout.addWidget(m_checkBoxCamera);
 
@@ -108,14 +108,11 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 		auto videoDeviceInfoList = nfx::VideoCaptureDeviceInfo::availableVideoDevices();
 		videoDeviceInfoList.sort();
 
-		unsigned i{ 0 };
 		for (const auto& device : videoDeviceInfoList)
 		{
 			m_comboCameras->addItem(device.name());
 
-			m_comboCameras->setData(i, std::pair(device.vendor(), device.formats()));
-
-			++i;
+			m_comboCameras->setData(device.idx(), std::pair(device.vendor(), device.formats()));
 		}
 	}
 
@@ -158,7 +155,7 @@ void CameraController::registerFrameReadyCallback(const std::function<void(nfx::
 
 void CameraController::cameraIndexChanged(unsigned idx)
 {
-	m_comboResolutions->clear();
+	m_comboFormats->clear();
 
 	const auto& data = std::any_cast<std::pair<std::string, std::vector<nfx::VideoFormat>>>(m_comboCameras->data(idx));
 	const auto& vendor = data.first;
@@ -168,11 +165,11 @@ void CameraController::cameraIndexChanged(unsigned idx)
 	{
 		std::stringstream ss;
 		ss << fmt.fourcc << " " << fmt.width << "x" << fmt.height << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
-		m_comboResolutions->addItem(ss.str());
+		m_comboFormats->addItem(ss.str());
 	}
 
 	m_lblCameraVendor->setText("Camera vendor: " + vendor);
-	m_comboResolutions->setCurrentIndex(m_comboResolutions->count() - 1);
+	m_comboFormats->setCurrentIndex(m_comboFormats->count() - 1);
 }
 
 void CameraController::cameraCheckBoxClicked(bool b)
@@ -182,7 +179,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		m_videoCaptureDevice.reset(new nfx::VideoCaptureDevice{ (uint16_t)m_comboCameras->currentIndex() });
 
 		const auto& data = std::any_cast<std::pair<std::string, std::vector<nfx::VideoFormat>>>(m_comboCameras->currentData());
-		const auto& fmt = data.second.at(m_comboResolutions->currentIndex());
+		const auto& fmt = data.second.at(m_comboFormats->currentIndex());
 
 		m_videoCaptureDevice->open(fmt.fourcc, fmt.width, fmt.height);
 
@@ -201,7 +198,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		SPDLOG_INFO("Capture device \"{}\" opened successfully.", m_comboCameras->currentText());
 		{
 			m_comboCameras->setEnable(false);
-			m_comboResolutions->setEnable(false);
+			m_comboFormats->setEnable(false);
 		}
 
 		if (m_checkBoxFlipH->isChecked())
@@ -235,7 +232,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 				m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", 0.f));
 
 				m_comboCameras->setEnable(true);
-				m_comboResolutions->setEnable(true);
+				m_comboFormats->setEnable(true);
 
 				{
 					m_brightnessSlider->setValue(0);
