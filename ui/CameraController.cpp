@@ -8,7 +8,7 @@
 
 #include <spdlog/spdlog.h>
 
-CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
+CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 {
 	{
 		m_checkBoxCamera = new nfx::GUI::CheckBox{ "Start/Stop" };
@@ -116,11 +116,6 @@ CameraController::CameraController() : nfx::GUI::Panel{ "Camera controller" }
 			m_comboCameras->setData(i, std::pair(device.vendor(), device.formats()));
 
 			++i;
-
-			SPDLOG_WARN("idx: {}", device.idx());
-			SPDLOG_WARN("idx: {}", device.name());
-			SPDLOG_WARN("idx: {}", device.vendor());
-			SPDLOG_WARN("idx: {}", device.path());
 		}
 	}
 

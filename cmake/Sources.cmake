@@ -12,8 +12,8 @@ set( sources_files
 					"App/App.h"
 					"App/App.cpp"
 
-					"ui/Gui.h"
-					"ui/Gui.cpp"
+					"ui/MainWidget.h"
+					"ui/MainWidget.cpp"
 
 					"ui/MenuBar.h"
 					"ui/MenuBar.cpp"

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <nfx/GUI/Panel.h>
+#include <nfx/GUI/Window.h>
 #include <nfx/GUI/VerticalLayout.h>
 
 #include <nfx/GUI/Image.h>
 
-class CameraViewport final : public nfx::GUI::Panel
+class CameraViewport final : public nfx::GUI::Window
 {
 public:
 	CameraViewport();

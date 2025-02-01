@@ -1,4 +1,4 @@
-#include "Gui.h"
+#include "MainWidget.h"
 
 #include <nfx/Window/Window.h>
 #include <nfx/Window/Context.h>
@@ -7,8 +7,8 @@
 
 #include <spdlog/spdlog.h>
 
-GUI::GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context)
-	: nfx::GUI::MainWidget{ p_window, p_context },
+MainWidget::MainWidget(nfx::Window::Window* p_window, nfx::Window::Context* p_context)
+	: nfx::GUI::MainWindow{ p_window, p_context },
 	  m_window{ p_window }
 {
 	{
@@ -28,11 +28,11 @@ GUI::GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context)
 	}
 
 	{
-		addPanel(m_cameraController);
-		addPanel(m_cameraViewport);
+		addWindow(m_cameraController);
+		addWindow(m_cameraViewport);
 	}
 
-	registerUpdateCallbackFunc(std::bind(&GUI::updateCallback, this));
+	registerUpdateCallbackFunc(std::bind(&MainWidget::updateCallback, this));
 	// p_window->registerKeyCallback(std::bind(&GUI::keyCallback, this, std::placeholders::_1));
 
 	m_cameraController->registerFrameReadyCallback(
@@ -42,29 +42,18 @@ GUI::GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context)
 			std::placeholders::_1));
 }
 
-GUI::~GUI()
+MainWidget::~MainWidget()
 {
 	SPDLOG_INFO("GUI destroyed.");
 }
 
-void GUI::update()
-{
-	m_cameraController->update();
-
-	m_statusBar.setFrameRate(2.f);
-
-	// auto a = frameRate();
-
-	// SPDLOG_INFO(a);
-}
-
-void GUI::updateCallback()
+void MainWidget::updateCallback()
 {
 	m_statusBar.setFrameRate(frameRate());
 	m_statusBar.setFrameTime(deltaTime());
 }
 
-void GUI::keyCallback(nfx::Window::Inputs::KeyState p_keyState)
+void MainWidget::keyCallback(nfx::Window::Inputs::KeyState p_keyState)
 {
 	if (p_keyState.key == nfx::Window::Inputs::Key::KeyF8 && p_keyState.state == nfx::Window::Inputs::State::Up)
 	{

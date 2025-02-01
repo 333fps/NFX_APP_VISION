@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nfx/GUI/MainWidget.h>
+#include <nfx/GUI/MainWindow.h>
 
 #include "MenuBar.h"
 #include "StatusBar.h"
@@ -14,25 +14,23 @@ namespace nfx
 		class Window;
 		class Context;
 
-		 namespace Inputs
+		namespace Inputs
 		{
 			struct KeyState;
-		 }
+		}
 	}
 }
 
-class GUI : public nfx::GUI::MainWidget
+class MainWidget : public nfx::GUI::MainWindow
 {
 public:
-	explicit GUI(nfx::Window::Window* p_window, nfx::Window::Context* p_context);
-	GUI() = delete;
-	GUI(const GUI&) = delete;
-	GUI& operator=(const GUI&) = delete;
-	GUI(GUI&&) = delete;
-	GUI& operator=(GUI&&) = delete;
-	virtual ~GUI();
-
-	void update();
+	explicit MainWidget(nfx::Window::Window* p_window, nfx::Window::Context* p_context);
+	MainWidget() = delete;
+	MainWidget(const MainWidget&) = delete;
+	MainWidget& operator=(const MainWidget&) = delete;
+	MainWidget(MainWidget&&) = delete;
+	MainWidget& operator=(MainWidget&&) = delete;
+	virtual ~MainWidget();
 
 private:
 	nfx::Window::Window* m_window;
@@ -48,5 +46,5 @@ private:
 
 private:
 	void updateCallback();
-	 void keyCallback(nfx::Window::Inputs::KeyState p_keyState);
+	void keyCallback(nfx::Window::Inputs::KeyState p_keyState);
 };

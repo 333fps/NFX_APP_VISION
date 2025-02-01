@@ -2,7 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
-CameraViewport::CameraViewport() : nfx::GUI::Panel{ "Camera viewport" }
+CameraViewport::CameraViewport() : nfx::GUI::Window{ "Camera viewport" }
 {
 	setLayout(&m_mainLayout);
 
@@ -18,7 +18,5 @@ CameraViewport::~CameraViewport()
 
 void CameraViewport::setImage(nfx::Graphics::Image& img)
 {
-	// SPDLOG_ERROR("{} {}", img.width, img.height);
-
 	m_image->setImage(img);
 }

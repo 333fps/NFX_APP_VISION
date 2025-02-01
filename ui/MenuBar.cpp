@@ -19,8 +19,8 @@ MenuBar::MenuBar(nfx::Window::Window* p_window) : nfx::GUI::MenuBar{},
 
 	addMenu(m_fileMenu);
 
-	//	m_menuItemFullscreen->registerClickCallback(std::bind(&nfx::Window::Window::toggleFullSCreen, p_window));
-	//	m_menuItemQuit->registerClickCallback(std::bind(&MenuBar::quitCallBack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	m_menuItemFullscreen->registerClickCallback(std::bind(&nfx::Window::Window::toggleFullscreen, p_window));
+	m_menuItemQuit->registerClickCallback(std::bind(&MenuBar::quitCallBack, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
 	setVisible(true);
 }
@@ -29,7 +29,7 @@ MenuBar::~MenuBar()
 {
 }
 
-// void MenuBar::quitCallBack([[maybe_unused]] int id, [[maybe_unused]] const char* label, [[maybe_unused]] const char* internalName)
-//{
-//	m_window->requestClose();
-// }
+void MenuBar::quitCallBack([[maybe_unused]] int id, [[maybe_unused]] const char* label, [[maybe_unused]] const char* internalName)
+{
+	m_window->requestClose();
+}

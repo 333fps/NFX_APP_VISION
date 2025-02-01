@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nfx/GUI/Panel.h>
+#include <nfx/GUI/Window.h>
 #include <nfx/GUI/VerticalLayout.h>
 #include <nfx/GUI/HorizontalLayout.h>
 #include <nfx/GUI/Combo.h>
@@ -10,7 +10,7 @@
 
 #include <nfx/VideoCapture/VideoCaptureDevice.h>
 
-class CameraController final : public nfx::GUI::Panel
+class CameraController final : public nfx::GUI::Window
 {
 public:
 	CameraController();
