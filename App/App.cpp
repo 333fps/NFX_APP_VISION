@@ -3,6 +3,7 @@
 #include <nfx/Window/Api.h>
 #include <nfx/Window/Window.h>
 #include <nfx/Window/Context.h>
+#include <nfx/Window/Inputs.h>
 #include <nfx/Graphics/GL/Enums.h>
 #include <nfx/Graphics/GL/Scene/Renderer.h>
 #include <nfx/Graphics/GL/Utils/Debugger.h>
@@ -13,6 +14,16 @@
 #include "ui/MainWidget.h"
 
 #include <spdlog/spdlog.h>
+
+void keyCBfunc(nfx::Window::Window* p_window, nfx::Window::Inputs::KeyState p_keyState)
+{
+	SPDLOG_INFO("Key: {}, State: {}, {}", static_cast<int>(p_keyState.key), static_cast<int>(p_keyState.state), p_window->title());
+}
+
+void charCBfunc(nfx::Window::Window* p_window, unsigned int p_char)
+{
+	SPDLOG_INFO("Char: {}, {}", p_char, p_window->title());
+}
 
 App::App(const std::string& p_name, const std::string& p_version, short p_width, short p_height)
 	: nfx::Application{ p_name, p_version, p_width, p_height }
@@ -61,7 +72,7 @@ void App::render()
 
 	{
 		m_renderer->begin();
-		m_renderer->setViewport(0, 0, m_window->width(), m_window->height());
+		// m_renderer->setViewport(0, 0, m_window->frameBufferWidth(), m_window->frameBufferHeight());
 
 		m_gui->draw();
 	}
@@ -79,6 +90,8 @@ bool App::init()
 	nfx::Window::Window::Config config{ .decoration = nfx::Window::Window::Decoration::Standard };
 
 	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name, &config);
+	// m_window->setKeyCallback(keyCBfunc);
+	m_window->setCharCallback(charCBfunc);
 
 	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL);
 
