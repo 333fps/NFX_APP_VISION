@@ -89,7 +89,7 @@ bool App::init()
 {
 	nfx::Window::Window::Config config{ .decoration = nfx::Window::Window::Decoration::Standard };
 
-	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, m_width, m_height, m_name, &config);
+	m_window = std::make_unique<nfx::Window::Window>(nfx::Window::Api::OpenGL, nfx::Window::Size{ m_width, m_height }, m_name, &config);
 	// m_window->setKeyCallback(keyCBfunc);
 	m_window->setCharCallback(charCBfunc);
 
