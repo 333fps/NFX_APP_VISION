@@ -15,8 +15,8 @@ set( NFX_WITH_PYTHON					OFF		)
 set( NFX_BUILD_OPENGL					ON		)
 set( NFX_DEBUG_OPENGL					ON		)
 
-set( NFX_BUILD_VULKAN					OFF		)
-set( NFX_DEBUG_VULKAN					OFF		)
+set( NFX_BUILD_VULKAN					ON		)
+set( NFX_DEBUG_VULKAN					ON		)
 
 set( NFX_WITH_IMGUI_FREETYPE			ON		)
 set( NFX_WITH_IMGUI_IMPLOT				ON		)

@@ -68,16 +68,11 @@ void App::update()
 
 void App::render()
 {
-	m_context->beginFrame();
+	m_renderer->prepareFrame();
 
-	{
-		m_renderer->begin();
-		// m_renderer->setViewport(0, 0, m_window->frameBufferWidth(), m_window->frameBufferHeight());
+	m_gui->draw();
 
-		m_gui->draw();
-	}
-
-	m_context->endFrame();
+	m_renderer->presentFrame();
 }
 
 void App::processEvents()
@@ -95,9 +90,8 @@ bool App::init()
 
 	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL);
 
-	m_context->beginFrame();
-
-	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>();
+	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>(m_context.get());
+	// m_renderer->prepareFrame();
 
 	{
 		m_window->show();
@@ -116,8 +110,8 @@ bool App::init()
 	{
 		std::vector<unsigned int> ignore{};
 		nfx::Graphics::GL::Debugger::init(ignore);
-		nfx::Graphics::GL::Debugger::breakOnError(false);
-		nfx::Graphics::GL::Debugger::breakOnWarning(false);
+		nfx::Graphics::GL::Debugger::breakOnError(true);
+		nfx::Graphics::GL::Debugger::breakOnWarning(true);
 		nfx::Graphics::GL::Debugger::setSeverityLevel(nfx::Graphics::GL::DebuggerSeverity::Notification);
 	}
 

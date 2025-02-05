@@ -2,7 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
-CameraViewport::CameraViewport() : nfx::GUI::Window{ "Camera viewport" }
+CameraViewport::CameraViewport() : nfx::GUI::Window{ "Camera viewport", 320, 240 }
 {
 	setLayout(&m_mainLayout);
 
