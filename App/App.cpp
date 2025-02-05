@@ -25,7 +25,7 @@ void charCBfunc(nfx::Window::Window* p_window, unsigned int p_char)
 	SPDLOG_INFO("Char: {}, {}", p_char, p_window->title());
 }
 
-App::App(const std::string& p_name, const std::string& p_version, short p_width, short p_height)
+App::App(const std::string& p_name, const std::string& p_version, uint32_t p_width, uint32_t p_height)
 	: nfx::Application{ p_name, p_version, p_width, p_height }
 {
 }

@@ -26,7 +26,7 @@ class App final : public nfx::Application
 {
 public:
 	App(const std::string& p_name, const std::string& p_version,
-		short p_width, short p_height);
+		uint32_t p_width, uint32_t p_height);
 	App() = delete;
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
