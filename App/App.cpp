@@ -49,11 +49,11 @@ int App::run(int argc, char* argv[])
 
 	while (!m_window->shouldClose())
 	{
+		processEvents();
+
 		update();
 
 		render();
-
-		processEvents();
 	}
 
 	m_gui->teardown();
@@ -88,10 +88,12 @@ bool App::init()
 	// m_window->setKeyCallback(keyCBfunc);
 	m_window->setCharCallback(charCBfunc);
 
-	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL);
+	nfx::Window::Context::GLConfig contextConfig;
+	contextConfig.shared = nullptr;
+
+	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL, m_window.get(), &contextConfig);
 
 	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>(m_context.get());
-	// m_renderer->prepareFrame();
 
 	{
 		m_window->show();
