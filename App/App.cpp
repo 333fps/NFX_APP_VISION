@@ -53,7 +53,16 @@ int App::run(int argc, char* argv[])
 
 	while (!m_window->shouldClose())
 	{
+
+		if (m_window->keyState(nfx::Window::Inputs::Key::Escape).state == nfx::Window::Inputs::State::Down)
+		{
+			SPDLOG_WARN("Escape key pressed, closing the application.");
+
+			m_window->requestClose();
+		}
 		processEvents();
+
+
 
 		update();
 
@@ -120,6 +129,8 @@ bool App::init()
 		nfx::Graphics::GL::Debugger::breakOnWarning(true);
 		nfx::Graphics::GL::Debugger::setSeverityLevel(nfx::Graphics::GL::DebuggerSeverity::Notification);
 	}
+
+	//m_renderer->prepareFrame();
 
 	m_gui = std::make_unique<MainWidget>(m_window.get(), m_context.get());
 
