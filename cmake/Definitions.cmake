@@ -147,6 +147,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
 						-Wunused-result
 						-Wunused-variable
 						-Wno-invalid-pch
+						-Wno-missing-declarations
 	)	
 endif()
 

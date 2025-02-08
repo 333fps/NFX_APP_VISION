@@ -15,6 +15,10 @@
 
 #include <spdlog/spdlog.h>
 
+
+void keyCBfunc(nfx::Window::Window* p_window, nfx::Window::Inputs::KeyState p_keyState);
+void charCBfunc(nfx::Window::Window* p_window, unsigned int p_char);
+
 void keyCBfunc(nfx::Window::Window* p_window, nfx::Window::Inputs::KeyState p_keyState)
 {
 	SPDLOG_INFO("Key: {}, State: {}, {}", static_cast<int>(p_keyState.key), static_cast<int>(p_keyState.state), p_window->title());
@@ -93,7 +97,7 @@ bool App::init()
 
 	m_context = std::make_unique<nfx::Window::Context>(nfx::Window::Api::OpenGL, m_window.get(), &contextConfig);
 
-	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>(m_context.get());
+	m_renderer = std::make_unique<nfx::Graphics::GL::Renderer>(m_context.get(), m_window.get());
 
 	{
 		m_window->show();
