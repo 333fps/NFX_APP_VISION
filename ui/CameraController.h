@@ -1,14 +1,13 @@
 #pragma once
 
-#include <nfx/GUI/Window.h>
-#include <nfx/GUI/VerticalLayout.h>
-#include <nfx/GUI/HorizontalLayout.h>
-#include <nfx/GUI/Combo.h>
-#include <nfx/GUI/CheckBox.h>
-#include <nfx/GUI/Slider.h>
-#include <nfx/GUI/Label.h>
+#include <nfx/Graphics.h>
 
-#include <nfx/VideoCapture/VideoCaptureDevice.h>
+#include <nfx/GUI.h>
+
+
+#include <nfx/VideoCapture.h>
+
+
 
 class CameraController final : public nfx::GUI::Window
 {
@@ -54,11 +53,11 @@ private:
 	nfx::GUI::Label* m_lblCameraVendor;
 
 public:
-	void registerFrameReadyCallback(const std::function<void(nfx::Graphics::Image&)>& p_frameReadyCallback);
+	void registerFrameReadyCallback(const std::function<void(nfx::VideoFrame&)>& p_frameReadyCallback);
 
 private:
 	std::unique_ptr<nfx::VideoCaptureDevice> m_videoCaptureDevice;
-	std::vector<std::function<void(nfx::Graphics::Image&)>> m_frameReadyCallbacks;
+	std::vector<std::function<void(nfx::VideoFrame&)>> m_frameReadyCallbacks;
 
 private:
 	// Callbacks
@@ -88,5 +87,6 @@ private:
 	void updateSettings();
 	void updateControls();
 
-	void onFrameReady(nfx::Graphics::Image& frame);
+	// void onFrameReady(nfx::Graphics::Image& frame);
+	void onFrameReady(nfx::VideoFrame& frame);
 };

@@ -1,9 +1,8 @@
 #include "MainWidget.h"
 
-#include <nfx/Window/Window.h>
-#include <nfx/Window/Context.h>
-#include "nfx/Window/Inputs.h"
-#include <nfx/GUI/DockSpace.h>
+#include <nfx/Window.h>
+
+#include <nfx/GUI.h>
 
 #include <spdlog/spdlog.h>
 

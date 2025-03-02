@@ -1,9 +1,8 @@
 #pragma once
 
-#include <nfx/Window/Window.h>
-#include <nfx/GUI/MenuBar.h>
-#include <nfx/GUI/Menu.h>
-#include <nfx/GUI/MenuItem.h>
+#include <nfx/Window.h>
+#include <nfx/GUI.h>
+
 
 class MenuBar final : public nfx::GUI::MenuBar
 {

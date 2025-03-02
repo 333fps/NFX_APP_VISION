@@ -28,7 +28,12 @@ message( "Configuring: " ${PROJECT_NAME} )
 message( STATUS "Cmake version: " ${CMAKE_VERSION} )
 message( STATUS "Using cmake toolchain file: " ${CMAKE_TOOLCHAIN_FILE} )
 
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY	"${PROJECT_BINARY_DIR}/bin/" )
+# Set output directories
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(OUTPUT_DIR "${PROJECT_BINARY_DIR}/${PROJECT_NAME}_${COMPILER_FULL_NAME}-${ARCHITECTURE}_$<CONFIG>/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_DIR})
 
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
@@ -44,3 +49,13 @@ include( cmake/Sources.cmake		)
 include( cmake/Dependencies.cmake	)
 
 set_target_properties( ${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX} )
+
+# Copy runtime dependencies using CMake's built-in mechanism
+if(WIN32)
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			$<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND_EXPAND_LISTS
+	)
+endif()

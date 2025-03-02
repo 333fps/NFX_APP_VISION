@@ -1,9 +1,10 @@
 #pragma once
 
-#include <nfx/GUI/Window.h>
-#include <nfx/GUI/VerticalLayout.h>
+#include <nfx/GUI.h>
 
-#include <nfx/GUI/Image.h>
+
+
+#include <nfx/VideoCapture.h>
 
 class CameraViewport final : public nfx::GUI::Window
 {
@@ -15,7 +16,7 @@ public:
 	CameraViewport& operator=(CameraViewport&&) = delete;
 	virtual ~CameraViewport();
 
-	void setImage(nfx::Graphics::Image&);
+	void setImage(nfx::VideoFrame&);
 
 private:
 	nfx::GUI::VerticalLayout m_mainLayout;

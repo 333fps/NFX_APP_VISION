@@ -1,10 +1,6 @@
 #include "CameraController.h"
 
-#include <nfx/VideoCapture/VideoCaptureDeviceInfo.h>
-#include <nfx/VideoCapture/VideoCaptureDevice.h>
-#include <nfx/VideoCapture/VideoFormat.h>
-#include <nfx/VideoCapture/Enums.h>
-#include <nfx/VideoCapture/BackEndInfo.h>
+#include <nfx/VideoCapture.h>
 
 #include <spdlog/spdlog.h>
 
@@ -148,7 +144,7 @@ CameraController::~CameraController()
 {
 }
 
-void CameraController::registerFrameReadyCallback(const std::function<void(nfx::Graphics::Image&)>& p_frameReadyCallback)
+void CameraController::registerFrameReadyCallback(const std::function<void(nfx::VideoFrame&)>& p_frameReadyCallback)
 {
 	m_frameReadyCallbacks.push_back(p_frameReadyCallback);
 }
@@ -164,7 +160,7 @@ void CameraController::cameraIndexChanged(unsigned idx)
 	for (const auto& fmt : formats)
 	{
 		std::stringstream ss;
-		ss << fmt.fourcc << " " << fmt.width << "x" << fmt.height << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
+		ss << fourccToString(fmt.fourcc) << " " << fmt.width << "x" << fmt.height << "/" << fmt.bitcount << "bpp @" << fmt.fps << "fps ";
 		m_comboFormats->addItem(ss.str());
 	}
 
@@ -220,12 +216,12 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	}
 	else
 	{
+		SPDLOG_INFO("Closing capture device \"{}\".", m_comboCameras->currentText());
+		m_videoCaptureDevice->close();
+
 		if (m_videoCaptureDevice && m_videoCaptureDevice->isOpen())
 		{
-			SPDLOG_INFO("Closing capture device \"{}\".", m_comboCameras->currentText());
-			m_videoCaptureDevice->close();
-
-			if (!m_videoCaptureDevice->isOpen())
+			if (m_videoCaptureDevice->isOpen())
 			{
 				SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras->currentText());
 
@@ -291,13 +287,13 @@ void CameraController::cameraCheckBoxClicked(bool b)
 					m_irisSlider->setEnable(false);
 					m_focusSlider->setEnable(false);
 				}
+
+				m_videoCaptureDevice.release();
 			}
 			else
 			{
 				SPDLOG_ERROR("Failed to close Capture device \"{}\".", m_comboCameras->currentText());
 			}
-
-			m_videoCaptureDevice.release();
 		}
 		else
 		{
@@ -700,11 +696,11 @@ void CameraController::updateControls()
 	}
 }
 
-void CameraController::onFrameReady(nfx::Graphics::Image& frame)
+void CameraController::onFrameReady(nfx::VideoFrame& frame)
 {
 	if (m_videoCaptureDevice)
 	{
-		m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", m_videoCaptureDevice->fps()).c_str());
+		m_lblCameraFPS->setText(fmt::format("Frametime: {:.0f}fps", m_videoCaptureDevice->fps()).c_str());
 	}
 
 	for (const auto& cb : m_frameReadyCallbacks)

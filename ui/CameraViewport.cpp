@@ -16,7 +16,13 @@ CameraViewport::~CameraViewport()
 	delete m_image;
 }
 
-void CameraViewport::setImage(nfx::Graphics::Image& img)
+void CameraViewport::setImage(nfx::VideoFrame& frame)
 {
+	nfx::Graphics::Image img;
+	img.width = frame.width;
+	img.height = frame.height;
+	img.pixels = frame.pixels;
+
+
 	m_image->setImage(img);
 }

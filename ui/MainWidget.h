@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nfx/GUI/MainWindow.h>
+#include <nfx/GUI.h>
 
 #include "MenuBar.h"
 #include "StatusBar.h"

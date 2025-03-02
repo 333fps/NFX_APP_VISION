@@ -26,7 +26,7 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 						/arch:AVX
 #						/arch:AVX2
 						/W4						# warning level: /W0, /W1, /W2, /W3, /W4
-						/Wall
+#						/Wall
 						/WX-					# treat linker warnings as errors
 						/permissive-
 #						/fp:except
@@ -35,7 +35,7 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 						/fp:precise
 						/Zc:__cplusplus
 						/Zc:inline
-						/Zc:preprocessor		# Preprocessor conformance with c++>=11
+					#	/Zc:preprocessor		# Preprocessor conformance with c++>=11
 #						/Qspectre				# Spectre/Meltdown mitigations. Need specific msvc installation.
 
 # ------------------------------------ External libraries ------------------------------------------- #
@@ -148,7 +148,7 @@ if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
 						-Wunused-variable
 						-Wno-invalid-pch
 						-Wno-missing-declarations
-	)	
+	)
 endif()
 
 if( UNIX AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )

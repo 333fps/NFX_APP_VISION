@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nfx/Application/Application.h>
+#include <nfx/Application.h>
 
 namespace nfx
 {
@@ -27,7 +27,7 @@ class App final : public nfx::Application
 public:
 	App(const std::string& p_name, const std::string& p_version,
 		uint32_t p_width, uint32_t p_height);
-	App() = delete;
+	// App() = delete;
 	App(const App&) = delete;
 	App& operator=(const App&) = delete;
 	App(App&&) = delete;

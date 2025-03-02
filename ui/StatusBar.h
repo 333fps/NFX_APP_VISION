@@ -1,7 +1,7 @@
 #pragma once
 
-#include <nfx/GUI/StatusBar.h>
-#include <nfx/GUI/Label.h>
+#include <nfx/GUI.h>
+
 
 class StatusBar final : public nfx::GUI::StatusBar
 {

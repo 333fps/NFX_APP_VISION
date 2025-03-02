@@ -1,6 +1,6 @@
 #include "App.h"
 
-#include <nfx/Window/Api.h>
+/* #include <nfx/Window/Api.h>
 #include <nfx/Window/Window.h>
 #include <nfx/Window/Context.h>
 #include <nfx/Window/Inputs.h>
@@ -9,12 +9,14 @@
 #include <nfx/Graphics/GL/Utils/Debugger.h>
 #include <nfx/Graphics/Core/Color.h>
 
-#include <nfx/Graphics/GL/Functions/Functions_4_5.h>
+#include <nfx/Graphics/GL/Functions/Functions_4_5.h> */
+
+#include <nfx/Window.h>
+#include <nfx/Graphics.h>
 
 #include "ui/MainWidget.h"
 
 #include <spdlog/spdlog.h>
-
 
 void keyCBfunc(nfx::Window::Window* p_window, nfx::Window::Inputs::KeyState p_keyState);
 void charCBfunc(nfx::Window::Window* p_window, unsigned int p_char);
@@ -53,7 +55,6 @@ int App::run(int argc, char* argv[])
 
 	while (!m_window->shouldClose())
 	{
-
 		if (m_window->keyState(nfx::Window::Inputs::Key::Escape).state == nfx::Window::Inputs::State::Down)
 		{
 			SPDLOG_WARN("Escape key pressed, closing the application.");
@@ -62,14 +63,18 @@ int App::run(int argc, char* argv[])
 		}
 		processEvents();
 
-
-
 		update();
 
 		render();
 	}
 
 	m_gui->teardown();
+	m_gui.reset(); // Explicitly destroy GUI first
+
+	// Then destroy window-related resources in correct order
+	m_renderer.reset();
+	m_context.reset();
+	m_window.reset();
 
 	return EXIT_SUCCESS;
 }
@@ -130,7 +135,10 @@ bool App::init()
 		nfx::Graphics::GL::Debugger::setSeverityLevel(nfx::Graphics::GL::DebuggerSeverity::Notification);
 	}
 
-	//m_renderer->prepareFrame();
+	// m_renderer->prepareFrame();
+	{
+		// auto ui = MainWidget(m_window.get(), m_context.get());
+	}
 
 	m_gui = std::make_unique<MainWidget>(m_window.get(), m_context.get());
 

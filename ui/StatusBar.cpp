@@ -1,6 +1,7 @@
 #include "StatusBar.h"
 
-#include <nfx/Graphics/GL/Functions/Functions_1_0.h>
+#include <nfx/Graphics.h>
+
 #include <GL/glcorearb.h>
 
 #include <spdlog/spdlog.h>
