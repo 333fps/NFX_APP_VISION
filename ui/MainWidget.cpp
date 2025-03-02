@@ -44,6 +44,11 @@ MainWidget::MainWidget(nfx::Window::Window* p_window, nfx::Window::Context* p_co
 MainWidget::~MainWidget()
 {
 	SPDLOG_INFO("GUI destroyed.");
+
+	delete m_cameraController;
+	delete m_cameraViewport;
+	delete m_dockSpace;
+	delete m_menuBar;
 }
 
 void MainWidget::updateCallback()

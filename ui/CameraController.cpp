@@ -142,6 +142,12 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 
 CameraController::~CameraController()
 {
+	if (m_videoCaptureDevice)
+	{
+		m_videoCaptureDevice->close();
+		m_videoCaptureDevice.reset();
+	}
+	SPDLOG_ERROR("CameraController instance destroyed.");
 }
 
 void CameraController::registerFrameReadyCallback(const std::function<void(nfx::VideoFrame&)>& p_frameReadyCallback)
@@ -288,7 +294,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 					m_focusSlider->setEnable(false);
 				}
 
-				m_videoCaptureDevice.release();
+				m_videoCaptureDevice.reset();
 			}
 			else
 			{
