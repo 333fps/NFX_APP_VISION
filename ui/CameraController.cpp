@@ -34,6 +34,7 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 			m_saturationSlider = new nfx::GUI::Slider{ "Saturation" };
 			m_sharpnessSlider = new nfx::GUI::Slider{ "Sharpness" };
 			m_gammaSlider = new nfx::GUI::Slider{ "Gamma" };
+			m_colorSlider = new nfx::GUI::Slider{ "Color" };
 			m_whiteBalanceSlider = new nfx::GUI::Slider{ "White balance" };
 			m_backLightCompensationSlider = new nfx::GUI::Slider{ "Backlight compensation" };
 			m_gainSlider = new nfx::GUI::Slider{ "Gain" };
@@ -52,8 +53,8 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 			m_lblCameraVendor = new nfx::GUI::Label{ "Camera vendor: " };
 			m_lblCameraVendor->setEnable(false);
 
-			m_lblCameraFPS = new nfx::GUI::Label{ "Camera fps: " };
-			m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", 0.f));
+			m_lblCameraFPS = new nfx::GUI::Label{ fmt::format("Framerate: {:.0f}fps", 0.f) };
+
 			m_lblCameraFPS->setEnable(false);
 
 			m_mainLayout.addWidget(m_brightnessSlider);
@@ -62,6 +63,7 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 			m_mainLayout.addWidget(m_saturationSlider);
 			m_mainLayout.addWidget(m_sharpnessSlider);
 			m_mainLayout.addWidget(m_gammaSlider);
+			m_mainLayout.addWidget(m_colorSlider);
 			m_mainLayout.addWidget(m_whiteBalanceSlider);
 			m_mainLayout.addWidget(m_backLightCompensationSlider);
 			m_mainLayout.addWidget(m_gainSlider);
@@ -84,6 +86,7 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 			m_saturationSlider->setEnable(false);
 			m_sharpnessSlider->setEnable(false);
 			m_gammaSlider->setEnable(false);
+			m_colorSlider->setEnable(false);
 			m_whiteBalanceSlider->setEnable(false);
 			m_backLightCompensationSlider->setEnable(false);
 			m_gainSlider->setEnable(false);
@@ -123,6 +126,7 @@ CameraController::CameraController() : nfx::GUI::Window{ "Camera controller" }
 		m_saturationSlider->registerValueChangeCallback(std::bind(&CameraController::saturationSliderValueChanged, this, std::placeholders::_1));
 		m_sharpnessSlider->registerValueChangeCallback(std::bind(&CameraController::sharpnessSliderValueChanged, this, std::placeholders::_1));
 		m_gammaSlider->registerValueChangeCallback(std::bind(&CameraController::gammaSliderValueChanged, this, std::placeholders::_1));
+		m_colorSlider->registerValueChangeCallback(std::bind(&CameraController::colorSliderValueChanged, this, std::placeholders::_1));
 		m_whiteBalanceSlider->registerValueChangeCallback(std::bind(&CameraController::whiteBalanceSliderValueChanged, this, std::placeholders::_1));
 		m_backLightCompensationSlider->registerValueChangeCallback(std::bind(&CameraController::backLightCompensationSliderValueChanged, this, std::placeholders::_1));
 		m_gainSlider->registerValueChangeCallback(std::bind(&CameraController::gainSliderValueChanged, this, std::placeholders::_1));
@@ -243,6 +247,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 					m_saturationSlider->setValue(0);
 					m_sharpnessSlider->setValue(0);
 					m_gammaSlider->setValue(0);
+					m_colorSlider->setValue(0);
 					m_whiteBalanceSlider->setValue(0);
 					m_backLightCompensationSlider->setValue(0);
 					m_gainSlider->setValue(0);
@@ -253,6 +258,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 					m_saturationSlider->setRange(0, 0, 0, 0);
 					m_sharpnessSlider->setRange(0, 0, 0, 0);
 					m_gammaSlider->setRange(0, 0, 0, 0);
+					m_colorSlider->setRange(0, 0, 0, 0);
 					m_whiteBalanceSlider->setRange(0, 0, 0, 0);
 					m_backLightCompensationSlider->setRange(0, 0, 0, 0);
 					m_gainSlider->setRange(0, 0, 0, 0);
@@ -263,6 +269,7 @@ void CameraController::cameraCheckBoxClicked(bool b)
 					m_saturationSlider->setEnable(false);
 					m_sharpnessSlider->setEnable(false);
 					m_gammaSlider->setEnable(false);
+					m_colorSlider->setEnable(false);
 					m_whiteBalanceSlider->setEnable(false);
 					m_backLightCompensationSlider->setEnable(false);
 					m_gainSlider->setEnable(false);
@@ -353,6 +360,14 @@ void CameraController::gammaSliderValueChanged(float)
 	if (m_videoCaptureDevice)
 	{
 		m_videoCaptureDevice->setCurrentValue(nfx::VideoCaptureCapability::Gamma, m_gammaSlider->getCurrentValue());
+	}
+}
+
+void CameraController::colorSliderValueChanged(float)
+{
+	if (m_videoCaptureDevice)
+	{
+		m_videoCaptureDevice->setCurrentValue(nfx::VideoCaptureCapability::ColorEnable, m_colorSlider->getCurrentValue());
 	}
 }
 
@@ -546,6 +561,20 @@ void CameraController::updateSettings()
 		}
 	}
 
+	{ // Color
+		range = m_videoCaptureDevice->range(nfx::VideoCaptureCapability::ColorEnable);
+		if (range.max != 0)
+		{
+			m_colorSlider->setRange(range.min, range.max, range.step, range.dflt);
+			m_colorSlider->setValue(range.dflt);
+			m_colorSlider->setEnable(true);
+		}
+		else
+		{
+			m_colorSlider->setEnable(false);
+		}
+	}
+
 	{ // WhiteBalance
 		range = m_videoCaptureDevice->range(nfx::VideoCaptureCapability::WhiteBalance);
 
@@ -706,7 +735,7 @@ void CameraController::onFrameReady(nfx::VideoFrame& frame)
 {
 	if (m_videoCaptureDevice)
 	{
-		m_lblCameraFPS->setText(fmt::format("Frametime: {:.0f}fps", m_videoCaptureDevice->fps()).c_str());
+		m_lblCameraFPS->setText(fmt::format("Framerate: {:.0f}fps", m_videoCaptureDevice->fps()).c_str());
 	}
 
 	for (const auto& cb : m_frameReadyCallbacks)

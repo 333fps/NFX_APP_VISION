@@ -4,10 +4,7 @@
 
 #include <nfx/GUI.h>
 
-
 #include <nfx/VideoCapture.h>
-
-
 
 class CameraController final : public nfx::GUI::Window
 {
@@ -36,6 +33,7 @@ private:
 	nfx::GUI::Slider* m_saturationSlider;
 	nfx::GUI::Slider* m_sharpnessSlider;
 	nfx::GUI::Slider* m_gammaSlider;
+	nfx::GUI::Slider* m_colorSlider;
 	nfx::GUI::Slider* m_whiteBalanceSlider;
 	nfx::GUI::Slider* m_backLightCompensationSlider;
 	nfx::GUI::Slider* m_gainSlider;
@@ -70,6 +68,7 @@ private:
 	void saturationSliderValueChanged(float);
 	void sharpnessSliderValueChanged(float);
 	void gammaSliderValueChanged(float);
+	void colorSliderValueChanged(float);
 	void whiteBalanceSliderValueChanged(float);
 	void backLightCompensationSliderValueChanged(float);
 	void gainSliderValueChanged(float);
