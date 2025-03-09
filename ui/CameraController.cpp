@@ -216,12 +216,63 @@ void CameraController::cameraCheckBoxClicked(bool b)
 			m_videoCaptureDevice->flipVertically(true);
 		}
 
+		{ // TODO
+			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Exposure, true);
+			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Iris, true);
+			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Focus, true);
+
+			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::WhiteBalance, true);
+			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::Gain, false);
+		}
+
 		updateSettings();
 		updateControls();
 
-		{ // TODO
-			m_videoCaptureDevice->setAutoExposure(true);
-			m_videoCaptureDevice->setAutoWhiteBalance(false);
+		{
+			if (m_videoCaptureDevice->isAutomatic(nfx::VideoCaptureControl::Exposure))
+			{
+				m_exposureSlider->setEnable(false);
+			}
+			else
+			{
+				m_exposureSlider->setEnable(true);
+			}
+
+			if (m_videoCaptureDevice->isAutomatic(nfx::VideoCaptureControl::Iris))
+			{
+				m_irisSlider->setEnable(false);
+			}
+			else
+			{
+				m_irisSlider->setEnable(true);
+			}
+
+			if (m_videoCaptureDevice->isAutomatic(nfx::VideoCaptureControl::Focus))
+			{
+				m_focusSlider->setEnable(false);
+			}
+			else
+			{
+				m_focusSlider->setEnable(true);
+			}
+
+			if (m_videoCaptureDevice->isAutomatic(nfx::VideoCaptureCapability::WhiteBalance))
+			{
+				m_whiteBalanceSlider->setEnable(false);
+			}
+			else
+			{
+				m_whiteBalanceSlider->setEnable(true);
+			}
+
+			if (m_videoCaptureDevice->isAutomatic(nfx::VideoCaptureCapability::Gain))
+			{
+				m_gainSlider->setEnable(false);
+			}
+			else
+			{
+				m_gainSlider->setEnable(true);
+			}
 		}
 	}
 	else
