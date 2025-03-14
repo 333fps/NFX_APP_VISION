@@ -1,6 +1,9 @@
 #pragma once
 
 #include <nfx/Application.h>
+#include <nfx/Window.h>
+#include <nfx/GUI.h>
+#include <nfx/Graphics.h>
 
 namespace nfx
 {

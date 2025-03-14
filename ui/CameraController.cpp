@@ -1,6 +1,7 @@
 #include "CameraController.h"
 
 #include <nfx/VideoCapture.h>
+#include <nfx/GUI.h>
 
 #include <spdlog/spdlog.h>
 

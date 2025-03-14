@@ -55,18 +55,20 @@ set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POS
 #    VERBATIM
 #)
 
-# First, define a target for the copy operation
-add_custom_target(copy_nfx_dlls ALL
-    COMMAND ${CMAKE_COMMAND} -E echo "Copying DLLs from nfx framework directory: ${NFX_BINARY_DIR}"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${NFX_BINARY_DIR}"
-        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-    COMMENT "Copying NFX framework DLLs"
-    VERBATIM
-)
+if(WIN32)
+    # First, define a target for the copy operation
+    add_custom_target(copy_nfx_dlls ALL
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying DLLs from nfx framework directory: ${NFX_BINARY_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${NFX_BINARY_DIR}"
+            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+        COMMENT "Copying NFX framework DLLs"
+        VERBATIM
+    )
 
-# Make your main target depend on the copy operation
-add_dependencies(${PROJECT_NAME} copy_nfx_dlls)
+    # Make your main target depend on the copy operation
+    add_dependencies(${PROJECT_NAME} copy_nfx_dlls)
+endif()
 
 # Explicitly add file-level dependencies if you know specific files that should trigger the copy
 #if(EXISTS "${NFX_BINARY_DIR}")

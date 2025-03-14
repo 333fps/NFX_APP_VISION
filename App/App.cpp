@@ -13,6 +13,7 @@
 
 #include <nfx/Window.h>
 #include <nfx/Graphics.h>
+#include <nfx/GUI.h>
 
 #include "ui/MainWidget.h"
 
