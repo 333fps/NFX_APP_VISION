@@ -152,7 +152,7 @@ CameraController::~CameraController()
 		m_videoCaptureDevice->close();
 		m_videoCaptureDevice.reset();
 	}
-	SPDLOG_ERROR("CameraController instance destroyed.");
+	SPDLOG_INFO("CameraController instance destroyed.");
 }
 
 void CameraController::registerFrameReadyCallback(const std::function<void(nfx::VideoFrame&)>& p_frameReadyCallback)
