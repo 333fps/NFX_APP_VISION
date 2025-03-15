@@ -43,7 +43,7 @@ if( WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" )
 						/external:W0			# Disable warnings for external libraries
 
 # ------------------------------------ Code analysis (slow compilation) ----------------------------- #
-#						/analyze:WX- /analyze:external- /analyze
+						/analyze:WX- /analyze:external- /analyze
 
 # ------------------------------------ Warning suppressions ----------------------------------------- #
 #						/wd4061					# switch not handled
