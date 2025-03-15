@@ -218,12 +218,12 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		}
 
 		{ // TODO
-			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Exposure, false);
-			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Iris, false);
-			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Focus, false);
+		  // m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Exposure, false);
+		  // m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Iris, false);
+		  // m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Focus, false);
 
-			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::WhiteBalance, false);
-			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::Gain, false);
+			// m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::WhiteBalance, false);
+			// m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::Gain, false);
 		}
 
 		updateSettings();
@@ -279,7 +279,6 @@ void CameraController::cameraCheckBoxClicked(bool b)
 	else
 	{
 		SPDLOG_INFO("Closing capture device \"{}\".", m_comboCameras->currentText());
-		m_videoCaptureDevice->close();
 
 		if (m_videoCaptureDevice && m_videoCaptureDevice->isOpen())
 		{
@@ -352,6 +351,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 					m_irisSlider->setEnable(false);
 					m_focusSlider->setEnable(false);
 				}
+
+				m_videoCaptureDevice->close();
 
 				m_videoCaptureDevice.reset();
 			}
@@ -521,6 +522,11 @@ void CameraController::checkBoxFlipHClicked(bool b)
 
 void CameraController::updateSettings()
 {
+	if (!m_videoCaptureDevice)
+	{
+		return;
+	}
+
 	nfx::VideoCaptureCapabilityRange range{};
 
 	{ // Brightness
@@ -675,6 +681,11 @@ void CameraController::updateSettings()
 
 void CameraController::updateControls()
 {
+	if (!m_videoCaptureDevice)
+	{
+		return;
+	}
+
 	nfx::VideoCaptureControlRange range{};
 
 	{ // Pan
