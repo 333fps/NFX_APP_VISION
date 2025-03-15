@@ -218,12 +218,12 @@ void CameraController::cameraCheckBoxClicked(bool b)
 		}
 
 		{ // TODO
-			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Exposure, true);
-			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Iris, true);
-			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Focus, true);
+			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Exposure, false);
+			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Iris, false);
+			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureControl::Focus, false);
 
-			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::WhiteBalance, true);
-			m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::Gain, false);
+			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::WhiteBalance, false);
+			//m_videoCaptureDevice->setAutomatic(nfx::VideoCaptureCapability::Gain, false);
 		}
 
 		updateSettings();
