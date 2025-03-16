@@ -6,6 +6,8 @@
 #	nfx Marine © 2024 <ronan.fesselier@nfxMarine.com>
 #
 
+set(HIDE_CONSOLE FALSE)
+
 set( RC )
 if( WIN32)
 		configure_file(
