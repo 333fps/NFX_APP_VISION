@@ -286,8 +286,6 @@ void CameraController::cameraCheckBoxClicked(bool b)
 			{
 				SPDLOG_INFO("Capture device \"{}\" closed.", m_comboCameras->currentText());
 
-				m_lblCameraFPS->setText(fmt::format("Camera fps {:.3f}", 0.f));
-
 				m_comboCameras->setEnable(true);
 				m_comboFormats->setEnable(true);
 
@@ -355,6 +353,8 @@ void CameraController::cameraCheckBoxClicked(bool b)
 				m_videoCaptureDevice->close();
 
 				m_videoCaptureDevice.reset();
+
+				m_lblCameraFPS->setText(fmt::format("Framerate: {:.0f}fps", 0.f));
 			}
 			else
 			{
