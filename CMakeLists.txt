@@ -43,45 +43,21 @@ include(cmake/Options.cmake)
 include(cmake/Sources.cmake)
 include(cmake/Dependencies.cmake)
 
-
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E echo "Copying DLLs from nfx framework directory: ${NFX_BINARY_DIR}"
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory
-#        "${NFX_BINARY_DIR}"
-#        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-#    COMMENT "Copying NFX framework DLLs"
-#    VERBATIM
-#)
-
 if(WIN32)
-    # First, define a target for the copy operation
+    # Ensure NFX_BINARY_DIR is set
+    if(NOT DEFINED NFX_BINARY_DIR)
+        message(FATAL_ERROR "NFX_BINARY_DIR is not defined. Please set it to the directory containing the NFX Framework DLLs.")
+    endif()
+
+    # Define a custom target to copy DLLs
     add_custom_target(copy_nfx_dlls ALL
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying DLLs from nfx framework directory: ${NFX_BINARY_DIR}"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${NFX_BINARY_DIR}"
-            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-        COMMENT "Copying NFX framework DLLs"
-        VERBATIM
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${NFX_BINARY_DIR}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        COMMENT "Copying NFX Framework DLLs to the output directory"
     )
 
-    # Make your main target depend on the copy operation
+    # Make the main project target depend on the custom target
     add_dependencies(${PROJECT_NAME} copy_nfx_dlls)
 endif()
-
-# Explicitly add file-level dependencies if you know specific files that should trigger the copy
-#if(EXISTS "${NFX_BINARY_DIR}")
-#    file(GLOB NFX_DLL_FILES "${NFX_BINARY_DIR}/*.dll")
-#    if(NFX_DLL_FILES)
-#        add_custom_command(
-#            OUTPUT "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nfx_dlls_copied.timestamp"
-#            COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nfx_dlls_copied.timestamp"
-#            DEPENDS ${NFX_DLL_FILES}
-#            COMMENT "Updating DLL timestamp file"
-#            VERBATIM
-#        )
-#        add_custom_target(track_nfx_dlls DEPENDS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/nfx_dlls_copied.timestamp")
-#        add_dependencies(copy_nfx_dlls track_nfx_dlls)
-#    endif()
-#endif()

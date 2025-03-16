@@ -24,11 +24,15 @@ void charCBfunc(nfx::Window::Window* p_window, unsigned int p_char);
 
 void keyCBfunc(nfx::Window::Window* p_window, nfx::Window::Inputs::KeyState p_keyState)
 {
+	(void)p_window;
+	(void)p_keyState;
 	SPDLOG_INFO("Key: {}, State: {}, {}", static_cast<int>(p_keyState.key), static_cast<int>(p_keyState.state), p_window->title());
 }
 
 void charCBfunc(nfx::Window::Window* p_window, unsigned int p_char)
 {
+	(void)p_window;
+	(void)p_char;
 	SPDLOG_INFO("Char: {}, {}", p_char, p_window->title());
 }
 
