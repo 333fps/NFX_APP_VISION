@@ -71,3 +71,9 @@ if( WIN32 )
 		set_target_properties( ${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE )
 	endif()
 endif()
+
+#------------------------------------------------------------------------------
+# Summary
+#------------------------------------------------------------------------------
+include(FeatureSummary)
+feature_summary(WHAT ALL)

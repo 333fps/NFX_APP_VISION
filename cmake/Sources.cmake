@@ -47,7 +47,7 @@ add_executable(${PROJECT_NAME}
 )
 
 # Configure the target
-target_precompile_headers(${PROJECT_NAME} REUSE_FROM nfxCore)
+#target_precompile_headers(${PROJECT_NAME} REUSE_FROM nfxCore)
 target_include_directories(${PROJECT_NAME} PRIVATE ".")
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${CXX_COMPILE_FLAGS}>)
 
